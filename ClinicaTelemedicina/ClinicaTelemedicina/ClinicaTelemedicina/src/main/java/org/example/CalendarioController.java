@@ -10,21 +10,20 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class CalendarioController {
-	
-	private Stage stage;
-	private Scene scene;
-	private Parent root;
-	
+
 	public void logout(ActionEvent e) {
 		try {
 			App.setRoot("login");
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
 	
-	public void createRecepcionista(ActionEvent e) throws IOException{
-			App.setRoot("CadastroRecepcionista");
+	public void createRecepcionista(ActionEvent e) throws IOException {
+		App.setRoot("CadastroRecepcionista");
+	}
+
+	public void createMedico(ActionEvent e) throws IOException {
+		App.setRoot("CadastroMedico");
 	}
 }

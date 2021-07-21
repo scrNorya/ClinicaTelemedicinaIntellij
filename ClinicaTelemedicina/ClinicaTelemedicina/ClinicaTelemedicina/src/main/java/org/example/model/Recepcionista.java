@@ -10,7 +10,7 @@ public class Recepcionista extends Pessoa {
 	private String senha;
 
 	public Recepcionista(String nome, String cpf, long telefone, String email, String endereco,
-			String senha){
+						 String senha){
 		super(nome, cpf, telefone, email, endereco);
 		this.senha = senha;
 	}
@@ -22,7 +22,7 @@ public class Recepcionista extends Pessoa {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	
-	
-	
+
+
+
 }//end Recepcionista

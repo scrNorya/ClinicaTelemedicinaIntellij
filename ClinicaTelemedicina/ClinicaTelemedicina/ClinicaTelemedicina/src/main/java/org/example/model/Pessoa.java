@@ -56,5 +56,5 @@ public abstract class Pessoa {
 	public long getTelefone() {
 		return telefone;
 	}
-	
+
 }//end Pessoa

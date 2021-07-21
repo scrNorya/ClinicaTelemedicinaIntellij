@@ -1,6 +1,7 @@
 package org.example.utils;
 
 import java.util.InputMismatchException;
+import java.util.Objects;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -16,14 +17,14 @@ public class FieldsValidator {
 			try {
 				InternetAddress destinyEmail = new InternetAddress(email);
 				destinyEmail.validate();
-				
+
 				return true;
-				
+
 			} catch (AddressException e) {
 				throw new Exception("Email inválido!");
 			}
 		}
-		
+
 		return false;
 
 	}
@@ -34,18 +35,18 @@ public class FieldsValidator {
 			if (name.length() > 1) {
 				return true;
 			}
-			
+
 		}
 		throw new Exception("Nome inválido!");
 	}
-	
+
 	public boolean isEnderecoValid (String endereco) throws Exception {
 		if(!endereco.isEmpty() && endereco != null) {
 			return true;
 		}
 		throw new Exception("Endereço inválido!");
 	}
-	
+
 	public boolean isTelefoneValid (String telefone) throws Exception {
 		if(!telefone.isEmpty() && telefone != null) {
 			return true;
@@ -101,6 +102,12 @@ public class FieldsValidator {
 			throw new Exception("CPF inválido!");
 		}
 	}
-	
-	
+
+	public boolean isCRMValid (String CRM) throws Exception {
+		if(CRM != null && CRM.length() == 5) {
+			return true;
+		}
+		throw new Exception("CRM inválido!");
+	}
+
 }
