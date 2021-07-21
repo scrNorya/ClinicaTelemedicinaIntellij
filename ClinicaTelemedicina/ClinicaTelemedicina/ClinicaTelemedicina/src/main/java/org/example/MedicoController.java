@@ -153,8 +153,6 @@ public class MedicoController {
             }
             if (medico != null) {
                 return medico;
-            } else {
-                throw new Exception("CPF não encontrado!");
             }
         }
         return null;

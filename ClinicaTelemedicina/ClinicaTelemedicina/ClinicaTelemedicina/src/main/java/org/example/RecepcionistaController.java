@@ -109,27 +109,20 @@ public class RecepcionistaController {
 		return null;
 	}
 
-	public Recepcionista find(String cpf){
-		try {
-
-			if (validator.isCpf(cpf)) {
-				Map<String, Object> data = JsonUtils.readValues(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6));
-				Recepcionista recepcionista = null;
-				for (Map.Entry<String, Object> entry : data.entrySet()) {
-					Map<String, Object> values = (Map<String, Object>) entry.getValue();
-					if (cpf.equals(values.get("cpf"))) {
-						Long telefoneValue = new Long(values.get("telefone").toString());
-						recepcionista = new Recepcionista(values.get("nome").toString(), cpf, telefoneValue,
-								values.get("email").toString(), values.get("endereco").toString(),
-								values.get("senha").toString());
-						return recepcionista;
-					}
+	public Recepcionista find(String cpf) throws Exception {
+		if (validator.isCpf(cpf)) {
+			Map<String, Object> data = JsonUtils.readValues(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6));
+			Recepcionista recepcionista = null;
+			for (Map.Entry<String, Object> entry : data.entrySet()) {
+				Map<String, Object> values = (Map<String, Object>) entry.getValue();
+				if (cpf.equals(values.get("cpf"))) {
+					Long telefoneValue = new Long(values.get("telefone").toString());
+					recepcionista = new Recepcionista(values.get("nome").toString(), cpf, telefoneValue,
+							values.get("email").toString(), values.get("endereco").toString(),
+							values.get("senha").toString());
+					return recepcionista;
 				}
-
 			}
-		} catch (Exception e) {
-			generateAlert(e.getMessage());
-
 		}
 		return null;
 	}
@@ -149,8 +142,6 @@ public class RecepcionistaController {
 			}
 			if (recepcionista != null) {
 				return recepcionista;
-			} else {
-				throw new Exception("CPF não encontrado!");
 			}
 		}
 		return null;

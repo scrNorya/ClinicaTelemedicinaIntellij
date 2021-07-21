@@ -28,7 +28,8 @@ public class LoginController {
 
 	public boolean login() {
 		try {
-			recepcionista = recepcionistaController.findByCPF(username.getText());
+			System.out.println(username.getText());
+			recepcionista = recepcionistaController.find(username.getText());
 			if(recepcionista != null) {
 				if(recepcionista.getSenha().equals(password.getText())) {
 					switchToRecepcionista();
