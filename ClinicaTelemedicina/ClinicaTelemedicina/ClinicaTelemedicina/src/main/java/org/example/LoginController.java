@@ -7,25 +7,63 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import org.example.utils.JsonUtils;
+import org.example.RecepcionistaController;
+import org.example.model.Medico;
+import org.example.model.Recepcionista;
+import org.example.model.Medico;
 
 public class LoginController {
 	
 	@FXML private TextField username;
 	
 	@FXML private PasswordField password;
-	
-	
-	public void login(ActionEvent e) {
-		Map<String, Object> data = JsonUtils.readValues(LoginController.class.getResource("Recepcionista.json").toString().substring(6));
 
+	private Recepcionista recepcionista = null;
+
+	private Medico medico = null;
+
+	private RecepcionistaController recepcionistaController = new RecepcionistaController();
+
+	private MedicoController medicoController = new MedicoController();
+
+	public boolean login() {
+		try {
+			recepcionista = recepcionistaController.findByCPF(username.getText());
+			if(recepcionista != null) {
+				if(recepcionista.getSenha().equals(password.getText())) {
+					switchToRecepcionista();
+					return true;
+				} else {
+//					medicoController.generateAlert("Senha incorreta");
+				}
+			}
+		} catch (Exception e) {
+//			medicoController.generateAlert(e.getMessage());
+		}
+		if(recepcionista == null) {
+			try {
+				medico = medicoController.findByCPF(username.getText());
+				if(medico != null) {
+					if(medico.getSenha().equals(password.getText())) {
+						switchToMedico();
+						return true;
+					} else {
+//						medicoController.generateAlert("Senha incorreta");
+					}
+				}
+			} catch (Exception e) {
+//				medicoController.generateAlert(e.getMessage());
+			}
+		}
+		medicoController.generateAlert("Usuário ou senha incorretos");
+		return true;
 	}
 	
-	public void switchToMedico(ActionEvent e) throws IOException {
+	public void switchToMedico() throws IOException {
 		App.setRoot("Agenda");
 	}
 	
-	public void switchToRecepcionista(ActionEvent e) throws IOException {
+	public void switchToRecepcionista() throws IOException {
 		App.setRoot("Calendario");
 	}
 }

@@ -109,7 +109,7 @@ public class MedicoController {
             String cpf = this.findCPF.getText();
 
             if (validator.isCpf(cpf)) {
-                Map<String, Object> data = JsonUtils.readValues("./Jsons/Medicos/medico.json");
+                Map<String, Object> data = JsonUtils.readValues(RecepcionistaController.class.getResource("Medico.json").toString().substring(6));
                 Medico medico = null;
                 for (Map.Entry<String, Object> entry : data.entrySet()) {
                     Map<String, Object> values = (Map<String, Object>) entry.getValue();
@@ -132,6 +132,30 @@ public class MedicoController {
         } catch (Exception e) {
             generateAlert(e.getMessage());
 
+        }
+        return null;
+
+    }
+    public Medico findByCPF(String cpf) throws Exception {
+        if (validator.isCpf(cpf)) {
+            Map<String, Object> data = JsonUtils.readValues(RecepcionistaController.class.getResource("Medico.json").toString().substring(6));
+            Medico medico = null;
+            for (Map.Entry<String, Object> entry : data.entrySet()) {
+                Map<String, Object> values = (Map<String, Object>) entry.getValue();
+                if (cpf.equals(values.get("cpf"))) {
+                    Long telefoneValue = new Long(values.get("telefone").toString());
+                    Long CRMValue = new Long(values.get("CRM").toString());
+                    medico = new Medico(values.get("nome").toString(), cpf, CRMValue ,telefoneValue,
+                            values.get("email").toString(), values.get("endereco").toString(),
+                            values.get("senha").toString());
+                    break;
+                }
+            }
+            if (medico != null) {
+                return medico;
+            } else {
+                throw new Exception("CPF não encontrado!");
+            }
         }
         return null;
 
@@ -253,7 +277,7 @@ public class MedicoController {
 
     }
 
-    private void generateAlert(String message) {
+    public void generateAlert(String message) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
         alert.setHeaderText(null);

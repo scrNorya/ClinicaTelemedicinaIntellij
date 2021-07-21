@@ -129,6 +129,28 @@ public class RecepcionistaController {
 		return null;
 
 	}
+	public Recepcionista findByCPF(String cpf) throws Exception{
+		if (validator.isCpf(cpf)) {
+			Map<String, Object> data = JsonUtils.readValues(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6));
+			Recepcionista recepcionista = null;
+			for (Map.Entry<String, Object> entry : data.entrySet()) {
+				Map<String, Object> values = (Map<String, Object>) entry.getValue();
+				if (cpf.equals(values.get("cpf"))) {
+					Long telefoneValue = new Long(values.get("telefone").toString());
+					recepcionista = new Recepcionista(values.get("nome").toString(), cpf, telefoneValue,
+							values.get("email").toString(), values.get("endereco").toString(),
+							values.get("senha").toString());
+					break;
+				}
+			}
+			if (recepcionista != null) {
+				return recepcionista;
+			} else {
+				throw new Exception("CPF não encontrado!");
+			}
+		}
+		return null;
+	}
 
 	private Entry<String, Object> compareData(String cpf, Map<String, Object> data) {
 		if(data!=null) {
@@ -245,7 +267,7 @@ public class RecepcionistaController {
 
 	}
 
-	private void generateAlert(String message) {
+	public void generateAlert(String message) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Information Dialog");
 		alert.setHeaderText(null);
