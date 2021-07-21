@@ -77,7 +77,7 @@ public class JsonUtils {
         try {
             BufferedReader br = new BufferedReader(new FileReader(jsonFile));
             ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> nodes = mapper.readValue(br, Map.class);;
+            Map<String, Object> nodes = mapper.readValue(br, Map.class);
             return nodes;
         } catch (Exception e) {
             // TODO Auto-generated catch block
