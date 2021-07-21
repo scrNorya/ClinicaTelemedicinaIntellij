@@ -17,6 +17,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import org.example.model.Medico;
+import org.example.model.Recepcionista;
 import org.example.utils.FieldsValidator;
 import org.example.utils.JsonUtils;
 
@@ -56,7 +57,7 @@ public class MedicoController {
         long userTelefone = 0;
 
         try {
-            Map<String, Object> data = JsonUtils.readValues("./Jsons/Medicos/medico.json");
+            Map<String, Object> data = JsonUtils.readValues(MedicoController.class.getResource("Medico.json").toString().substring(6));
             if (validator.isValidName(name.getText())) {
                 userName = name.getText();
             }
@@ -104,12 +105,22 @@ public class MedicoController {
 
 
     public Medico findByCPF() {
+        String cpf = this.findCPF.getText();
+        Medico medico = this.find(cpf);
+        if (medico != null) {
+            this.setVisibleText(medico);
+            return medico;
+        } else {
+            this.generateAlert("Cpf não encontrado!");
+        }
+        return null;
+    }
+
+    public Medico find(String cpf){
         try {
 
-            String cpf = this.findCPF.getText();
-
             if (validator.isCpf(cpf)) {
-                Map<String, Object> data = JsonUtils.readValues("./Jsons/Medicos/medico.json");
+                Map<String, Object> data = JsonUtils.readValues(MedicoController.class.getResource("Medico.json").toString().substring(6));
                 Medico medico = null;
                 for (Map.Entry<String, Object> entry : data.entrySet()) {
                     Map<String, Object> values = (Map<String, Object>) entry.getValue();
@@ -119,15 +130,10 @@ public class MedicoController {
                         medico = new Medico(values.get("nome").toString(), cpf, CRMValue ,telefoneValue,
                                 values.get("email").toString(), values.get("endereco").toString(),
                                 values.get("senha").toString());
-                        break;
+                        return medico;
                     }
                 }
-                if (medico != null) {
-                    this.setVisibleText(medico);
-                    return medico;
-                } else {
-                    throw new Exception("CPF não encontrado!");
-                }
+
             }
         } catch (Exception e) {
             generateAlert(e.getMessage());
@@ -156,7 +162,7 @@ public class MedicoController {
 
             if (validator.isCpf(CPF.getText())) {
                 if(generateConfirmationDialog("Deseja excluir o cadastro?")) {
-                    Map<String, Object> data = JsonUtils.readValues("./Jsons/Medicos/medico.json");
+                    Map<String, Object> data = JsonUtils.readValues(MedicoController.class.getResource("Medico.json").toString().substring(6));
                     String userCpf = CPF.getText();
                     Entry<String, Object> value = compareData(userCpf, data);
                     if (value != null) {
@@ -213,10 +219,10 @@ public class MedicoController {
                 try {
                     if (data != null) {
                         data.put(next, values);
-                        mapper.writeValue(new File("./Jsons/Medicos/medico.json"), data);
+                        mapper.writeValue(new File(MedicoController.class.getResource("Medico.json").toString().substring(6)), data);
                     } else {
                         map.put(next, values);
-                        mapper.writeValue(new File("./Jsons/Medicos/medico.json"), map);
+                        mapper.writeValue(new File(MedicoController.class.getResource("Medico.json").toString().substring(6)), map);
                     }
 
                 } catch (IOException e1) {
@@ -235,7 +241,7 @@ public class MedicoController {
                 data.replace(key, values);
                 int t = 1;
                 try {
-                    mapper.writeValue(new File("./Jsons/Medicos/medico.json"), data);
+                    mapper.writeValue(new File(MedicoController.class.getResource("Medico.json").toString().substring(6)), data);
                 } catch (IOException e1) {
                     throw new Exception("Erro ao atualizar cadastro!");
                 }
@@ -244,7 +250,7 @@ public class MedicoController {
 
                 data.remove(key);
                 try {
-                    mapper.writeValue(new File("./Jsons/Medicos/medico.json"), data);
+                    mapper.writeValue(new File(MedicoController.class.getResource("Medico.json").toString().substring(6)), data);
                 } catch (IOException e1) {
                     throw new Exception("Erro ao excluir cadastro!");
                 }
