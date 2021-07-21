@@ -53,7 +53,7 @@ public class RecepcionistaController {
 		long userTelefone = 0;
 
 		try {
-			Map<String, Object> data = JsonUtils.readValues("/Jsons/Recepcionistas/Recepcionista.json");
+			Map<String, Object> data = JsonUtils.readValues(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6));
 			if (validator.isValidName(name.getText())) {
 				userName = name.getText();
 			}
@@ -97,9 +97,16 @@ public class RecepcionistaController {
 	}
 
 
-	public Recepcionista findByCPF() {
+	public Recepcionista findByCPF() throws Exception {
 		String cpf = this.findCPF.getText();
-		return this.find(cpf);
+		Recepcionista recepcionista = this.find(cpf);
+		if (recepcionista != null) {
+			this.setVisibleText(recepcionista);
+			return recepcionista;
+		} else {
+			this.generateAlert("Cpf não encontrado!");
+		}
+		return null;
 	}
 
 	public Recepcionista find(String cpf){
@@ -115,15 +122,10 @@ public class RecepcionistaController {
 						recepcionista = new Recepcionista(values.get("nome").toString(), cpf, telefoneValue,
 								values.get("email").toString(), values.get("endereco").toString(),
 								values.get("senha").toString());
-						break;
+						return recepcionista;
 					}
 				}
-				if (recepcionista != null) {
-					this.setVisibleText(recepcionista);
-					return recepcionista;
-				} else {
-					throw new Exception("CPF não encontrado!");
-				}
+
 			}
 		} catch (Exception e) {
 			generateAlert(e.getMessage());
