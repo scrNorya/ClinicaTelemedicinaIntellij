@@ -53,7 +53,7 @@ public class RecepcionistaController {
 		long userTelefone = 0;
 
 		try {
-			Map<String, Object> data = JsonUtils.readValues("/Jsons/Recepcionistas/Recepcionista.json");
+			Map<String, Object> data = JsonUtils.readValues(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6));
 			if (validator.isValidName(name.getText())) {
 				userName = name.getText();
 			}
@@ -76,34 +76,44 @@ public class RecepcionistaController {
 					Map<String, Object> upMap = (Map<String, Object>) mapRecepcionista.getValue();
 					Recepcionista recepcionista = new Recepcionista(userName, upMap.get("cpf").toString(), userTelefone,
 							userEmail, userEndereco, upMap.get("senha").toString());
-					persistRecepcionista(recepcionista, data, mapRecepcionista.getKey(), Actions.Update);
-					generateAlert("Cadastro atualizado com sucesso!");
-					setVisibleText(recepcionista);
+					this.persistRecepcionista(recepcionista, data, mapRecepcionista.getKey(), Actions.Update);
+					this.generateAlert("Cadastro atualizado com sucesso!");
+					this.setVisibleText(recepcionista);
 				}
 
 			} else {
 				String userSenha = generatePassword();
 				Recepcionista recepcionista = new Recepcionista(userName, userCpf, userTelefone, userEmail,
 						userEndereco, userSenha);
-				persistRecepcionista(recepcionista, data, null, Actions.Create);
+				this.persistRecepcionista(recepcionista, data, null, Actions.Create);
 				emailController.sendRecepcionistaConfirmation(recepcionista);
-				generateAlert("Cadastro realizado com sucesso!");
+				this.generateAlert("Cadastro realizado com sucesso!");
 			}
 
 		} catch (Exception e) {
-			generateAlert(e.getMessage());
+			this.generateAlert(e.getMessage());
 		}
 
 	}
 
 
-	public Recepcionista findByCPF() {
+	public Recepcionista findByCPF() throws Exception {
+		String cpf = this.findCPF.getText();
+		Recepcionista recepcionista = this.find(cpf);
+		if (recepcionista != null) {
+			this.setVisibleText(recepcionista);
+			return recepcionista;
+		} else {
+			this.generateAlert("Cpf não encontrado!");
+		}
+		return null;
+	}
+
+	public Recepcionista find(String cpf){
 		try {
 
-			String cpf = this.findCPF.getText();
-
 			if (validator.isCpf(cpf)) {
-				Map<String, Object> data = JsonUtils.readValues("./Jsons/Recepcionistas/Recepcionista.json");
+				Map<String, Object> data = JsonUtils.readValues(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6));
 				Recepcionista recepcionista = null;
 				for (Map.Entry<String, Object> entry : data.entrySet()) {
 					Map<String, Object> values = (Map<String, Object>) entry.getValue();
@@ -112,22 +122,16 @@ public class RecepcionistaController {
 						recepcionista = new Recepcionista(values.get("nome").toString(), cpf, telefoneValue,
 								values.get("email").toString(), values.get("endereco").toString(),
 								values.get("senha").toString());
-						break;
+						return recepcionista;
 					}
 				}
-				if (recepcionista != null) {
-					this.setVisibleText(recepcionista);
-					return recepcionista;
-				} else {
-					throw new Exception("CPF não encontrado!");
-				}
+
 			}
 		} catch (Exception e) {
 			generateAlert(e.getMessage());
 
 		}
 		return null;
-
 	}
 	public Recepcionista findByCPF(String cpf) throws Exception{
 		if (validator.isCpf(cpf)) {
@@ -171,7 +175,7 @@ public class RecepcionistaController {
 
 			if (validator.isCpf(CPF.getText())) {
 				if(generateConfirmationDialog("Deseja excluir o cadastro?")) {
-					Map<String, Object> data = JsonUtils.readValues("./Jsons/Recepcionistas/Recepcionista.json");
+					Map<String, Object> data = JsonUtils.readValues(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6));
 					String userCpf = CPF.getText();
 					Entry<String, Object> value = compareData(userCpf, data);
 					if (value != null) {
@@ -185,8 +189,7 @@ public class RecepcionistaController {
 
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.generateAlert("Erro ao exluir cadastro!");
 		}
 	}
 
@@ -228,10 +231,10 @@ public class RecepcionistaController {
 				try {
 					if (data != null) {
 						data.put(next, values);
-						mapper.writeValue(new File("./Jsons/Recepcionistas/Recepcionista.json"), data);
+						mapper.writeValue(new File(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6)), data);
 					} else {
 						map.put(next, values);
-						mapper.writeValue(new File("./Jsons/Recepcionistas/Recepcionista.json"), map);
+						mapper.writeValue(new File(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6)), map);
 					}
 
 				} catch (IOException e1) {
@@ -249,7 +252,7 @@ public class RecepcionistaController {
 				data.replace(key, values);
 				int t = 1;
 				try {
-					mapper.writeValue(new File("./Jsons/Recepcionistas/Recepcionista.json"), data);
+					mapper.writeValue(new File(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6)), data);
 				} catch (IOException e1) {
 					throw new Exception("Erro ao atualizar cadastro!");
 				}
@@ -258,7 +261,7 @@ public class RecepcionistaController {
 
 				data.remove(key);
 				try {
-					mapper.writeValue(new File("./Jsons/Recepcionistas/Recepcionista.json"), data);
+					mapper.writeValue(new File(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6)), data);
 				} catch (IOException e1) {
 					throw new Exception("Erro ao excluir cadastro!");
 				}
