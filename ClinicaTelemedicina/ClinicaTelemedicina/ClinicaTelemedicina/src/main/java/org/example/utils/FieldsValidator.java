@@ -21,7 +21,7 @@ public class FieldsValidator {
 				return true;
 
 			} catch (AddressException e) {
-				throw new Exception("Email inválido!");
+				throw new Exception("Email invalido");
 			}
 		}
 
@@ -37,21 +37,21 @@ public class FieldsValidator {
 			}
 
 		}
-		throw new Exception("Nome inválido!");
+		throw new Exception("Nome invalido");
 	}
 
 	public boolean isEnderecoValid (String endereco) throws Exception {
 		if(!endereco.isEmpty() && endereco != null) {
 			return true;
 		}
-		throw new Exception("Endereço inválido!");
+		throw new Exception("Endereco invalido");
 	}
 
 	public boolean isTelefoneValid (String telefone) throws Exception {
 		if(!telefone.isEmpty() && telefone != null) {
 			return true;
 		}
-		throw new Exception("Telefone inválido!");
+		throw new Exception("Telefone invalido");
 	}
 
 	public boolean isCpf(String CPF) throws Exception {
@@ -59,7 +59,7 @@ public class FieldsValidator {
 				|| CPF.equals("33333333333") || CPF.equals("44444444444") || CPF.equals("55555555555")
 				|| CPF.equals("66666666666") || CPF.equals("77777777777") || CPF.equals("88888888888")
 				|| CPF.equals("99999999999") || (CPF.length() != 11))
-			throw new Exception("CPF inválido!");
+			throw new Exception("CPF invalido");
 
 		char dig10, dig11;
 		int sm, i, r, num, peso;
@@ -97,9 +97,9 @@ public class FieldsValidator {
 			if ((dig10 == CPF.charAt(9)) && (dig11 == CPF.charAt(10)))
 				return (true);
 			else
-				throw new Exception("CPF inválido!");
+				throw new Exception("CPF invalido");
 		} catch (InputMismatchException erro) {
-			throw new Exception("CPF inválido!");
+			throw new Exception("CPF invalido");
 		}
 	}
 
@@ -107,7 +107,7 @@ public class FieldsValidator {
 		if(CRM != null && CRM.length() == 5) {
 			return true;
 		}
-		throw new Exception("CRM inválido!");
+		throw new Exception("CRM invalido");
 	}
 
 }
