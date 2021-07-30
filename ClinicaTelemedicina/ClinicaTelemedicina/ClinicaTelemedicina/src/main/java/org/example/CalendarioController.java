@@ -2,16 +2,9 @@ package org.example;
 
 import java.io.IOException;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
 public class CalendarioController {
 
-	public void logout(ActionEvent e) {
+	public void logout() {
 		try {
 			App.setRoot("login");
 		} catch (IOException e1) {
@@ -19,11 +12,11 @@ public class CalendarioController {
 		}
 	}
 	
-	public void createRecepcionista(ActionEvent e) throws IOException {
+	public void createRecepcionista() throws IOException {
 		App.setRoot("CadastroRecepcionista");
 	}
 
-	public void createMedico(ActionEvent e) throws IOException {
+	public void createMedico() throws IOException {
 		App.setRoot("CadastroMedico");
 	}
 }

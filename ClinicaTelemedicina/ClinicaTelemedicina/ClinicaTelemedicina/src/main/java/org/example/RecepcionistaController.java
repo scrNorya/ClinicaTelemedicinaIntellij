@@ -1,51 +1,36 @@
 package org.example;
-
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.security.SecureRandom;
-import java.util.HashMap;
+import java.net.URISyntaxException;
 import java.util.Map;
-import java.util.Map.Entry;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import org.example.utils.*;
 import org.example.model.Recepcionista;
-import org.example.utils.FieldsValidator;
-import org.example.utils.JsonUtils;
 
 public class RecepcionistaController {
 
-	FieldsValidator validator = new FieldsValidator();
-	@FXML
-	private TextField name;
-	@FXML
-	private TextField CPF;
-	@FXML
-	private TextField email;
-	@FXML
-	private TextField endereco;
-	@FXML
-	private TextField telefone;
-	@FXML
-	private TextField findCPF;
+	@FXML private TextField name;
+	@FXML private TextField CPF;
+	@FXML private TextField email;
+	@FXML private TextField endereco;
+	@FXML private TextField telefone;
+	@FXML private TextField findCPF;
 
 	private EmailController emailController = new EmailController();
 
-	boolean staSearch = false;
-
-	public RecepcionistaController() {
-
+	public Recepcionista findByCPF() throws Exception {
+		String cpf = this.findCPF.getText();
+		Recepcionista recepcionista = (Recepcionista) Json.findByCPF(cpf, Persons.Recepcionista);
+		if (recepcionista != null) {
+			this.setVisibleText(recepcionista);
+			return recepcionista;
+		} else {
+			View.generateAlert("Cpf não encontrado!");
+		}
+		return null;
 	}
 
 	public void saveRecepcionista() {
-
 		String userCpf = "";
 		String userEmail = "";
 		String userName = "";
@@ -53,231 +38,76 @@ public class RecepcionistaController {
 		long userTelefone = 0;
 
 		try {
-			Map<String, Object> data = JsonUtils.readValues(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6));
-			if (validator.isValidName(name.getText())) {
+			if (Validations.isValidName(name.getText()) && Validations.isCpf(CPF.getText()) &&
+					Validations.isValidEmail(email.getText()) && Validations.isEnderecoValid(endereco.getText())
+					&& Validations.isTelefoneValid(telefone.getText())
+			) {
 				userName = name.getText();
-			}
-			if (validator.isCpf(CPF.getText())) {
 				userCpf = CPF.getText();
-			}
-			if (validator.isValidEmail(email.getText())) {
 				userEmail = email.getText();
-			}
-			if (validator.isEnderecoValid(endereco.getText())) {
 				userEndereco = endereco.getText();
-			}
-			if (validator.isTelefoneValid(telefone.getText())) {
-				userTelefone = new Long(telefone.getText());
-			}
+				userTelefone = Long.parseLong(telefone.getText());
 
-			Entry<String, Object> mapRecepcionista = compareData(userCpf, data);
-			if (mapRecepcionista != null) {
-				if (this.generateConfirmationDialog("Deseja alterar o cadastro?")) {
-					Map<String, Object> upMap = (Map<String, Object>) mapRecepcionista.getValue();
-					Recepcionista recepcionista = new Recepcionista(userName, upMap.get("cpf").toString(), userTelefone,
-							userEmail, userEndereco, upMap.get("senha").toString());
-					this.persistRecepcionista(recepcionista, data, mapRecepcionista.getKey(), Actions.Update);
-					this.generateAlert("Cadastro atualizado com sucesso!");
-					this.setVisibleText(recepcionista);
+				Map.Entry<String, Object> recepcionistaEntry = Json.findEntryByCpf(userCpf, Persons.Recepcionista);
+				Recepcionista recepcionista;
+				if (recepcionistaEntry != null) {
+					Map<String, Object> recepcionistaMap = (Map<String, Object>) recepcionistaEntry.getValue();
+					recepcionista = new Recepcionista(userName, recepcionistaMap.get("cpf").toString(),
+							userTelefone, userEmail, userEndereco, recepcionistaMap.get("senha").toString());
+					if (View.generateConfirmationDialog("Deseja alterar o cadastro?")) {
+						this.persistRecepcionista(recepcionista, recepcionistaEntry.getKey(), Actions.Update);
+						View.generateAlert("Cadastro atualizado com sucesso!");
+						this.setVisibleText(recepcionista);
+					}
+				} else {
+					String userSenha = Security.generatePassword();
+					recepcionista = new Recepcionista(userName, userCpf, userTelefone, userEmail,
+							userEndereco, userSenha);
+					this.persistRecepcionista(recepcionista, null, Actions.Create);
+					emailController.sendConfirmation(recepcionista, Persons.Recepcionista);
+					View.generateAlert("Cadastro realizado com sucesso!");
 				}
-
 			} else {
-				String userSenha = generatePassword();
-				Recepcionista recepcionista = new Recepcionista(userName, userCpf, userTelefone, userEmail,
-						userEndereco, userSenha);
-				this.persistRecepcionista(recepcionista, data, null, Actions.Create);
-				emailController.sendRecepcionistaConfirmation(recepcionista);
-				this.generateAlert("Cadastro realizado com sucesso!");
+				View.generateAlert("Verifique os dados inseridos e tente novamente");
 			}
-
 		} catch (Exception e) {
-			this.generateAlert(e.getMessage());
+			View.generateAlert(e.getMessage());
 		}
-
-	}
-
-
-	public Recepcionista findByCPF() throws Exception {
-		String cpf = this.findCPF.getText();
-		Recepcionista recepcionista = this.find(cpf);
-		if (recepcionista != null) {
-			this.setVisibleText(recepcionista);
-			return recepcionista;
-		} else {
-			this.generateAlert("Cpf não encontrado!");
-		}
-		return null;
-	}
-
-	public Recepcionista find(String cpf) throws Exception {
-		if (validator.isCpf(cpf)) {
-			Map<String, Object> data = JsonUtils.readValues(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6));
-			Recepcionista recepcionista = null;
-			for (Map.Entry<String, Object> entry : data.entrySet()) {
-				Map<String, Object> values = (Map<String, Object>) entry.getValue();
-				if (cpf.equals(values.get("cpf"))) {
-					Long telefoneValue = new Long(values.get("telefone").toString());
-					recepcionista = new Recepcionista(values.get("nome").toString(), cpf, telefoneValue,
-							values.get("email").toString(), values.get("endereco").toString(),
-							values.get("senha").toString());
-					return recepcionista;
-				}
-			}
-		}
-		return null;
-	}
-	public Recepcionista findByCPF(String cpf) throws Exception{
-		if (validator.isCpf(cpf)) {
-			Map<String, Object> data = JsonUtils.readValues(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6));
-			Recepcionista recepcionista = null;
-			for (Map.Entry<String, Object> entry : data.entrySet()) {
-				Map<String, Object> values = (Map<String, Object>) entry.getValue();
-				if (cpf.equals(values.get("cpf"))) {
-					Long telefoneValue = new Long(values.get("telefone").toString());
-					recepcionista = new Recepcionista(values.get("nome").toString(), cpf, telefoneValue,
-							values.get("email").toString(), values.get("endereco").toString(),
-							values.get("senha").toString());
-					break;
-				}
-			}
-			if (recepcionista != null) {
-				return recepcionista;
-			}
-		}
-		return null;
-	}
-
-	private Entry<String, Object> compareData(String cpf, Map<String, Object> data) {
-		if(data!=null) {
-			for (Map.Entry<String, Object> entry : data.entrySet()) {
-				Map<String, Object> values = (Map<String, Object>) entry.getValue();
-				if (cpf.equals(values.get("cpf"))) {
-					return entry;
-
-				}
-			}
-		}
-
-		return null;
 	}
 
 	public void deleleteRecepcionista() {
 		try {
-
-			if (validator.isCpf(CPF.getText())) {
-				if(generateConfirmationDialog("Deseja excluir o cadastro?")) {
-					Map<String, Object> data = JsonUtils.readValues(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6));
+			if (Validations.isCpf(CPF.getText())) {
+				if(View.generateConfirmationDialog("Deseja excluir o cadastro?")) {
 					String userCpf = CPF.getText();
-					Entry<String, Object> value = compareData(userCpf, data);
+					Map.Entry<String, Object> value = Json.findEntryByCpf(userCpf, Persons.Recepcionista);
 					if (value != null) {
-						this.persistRecepcionista(null, data, value.getKey(), Actions.Delete);
-						this.generateAlert("Cadastro excluído");
+						this.persistRecepcionista(null, value.getKey(), Actions.Delete);
+						View.generateAlert("Cadastro excluído");
 						this.resetText();
 					} else {
 						throw new Exception("Recepcionista não cadastrado");
 					}
 				}
-
 			}
 		} catch (Exception e) {
-			this.generateAlert("Erro ao exluir cadastro!");
+			View.generateAlert("Erro ao exluir cadastro!");
 		}
 	}
 
-
-	private String generatePassword() {
-		String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-		SecureRandom random = new SecureRandom();
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < 8; i++) {
-			int randomIndex = random.nextInt(chars.length());
-			sb.append(chars.charAt(randomIndex));
-		}
-
-		return sb.toString();
-	}
-
-	private void persistRecepcionista(Recepcionista recepcionista, Map<String, Object> data, String key, Actions action)
-			throws Exception {
-		Map<String, Object> maps = new HashMap<String, Object>();
-		Map<String, Object> map = new HashMap<String, Object>();
-		Map<String, Object> values = new HashMap<String, Object>();
-		ObjectMapper mapper = new ObjectMapper();
-
+	private void persistRecepcionista(Recepcionista recepcionista, String key, Actions action)
+			throws URISyntaxException, IOException {
 		switch (action) {
-
 			case Create:
-				String next = "1";
-				if (data != null) {
-					next = new Integer(data.size() + 1).toString();
-				}
-
-				values.put("cpf", recepcionista.getCpf());
-				values.put("nome", recepcionista.getNome());
-				values.put("email", recepcionista.getEmail());
-				values.put("endereco", recepcionista.getEndereco());
-				values.put("telefone", recepcionista.getTelefone());
-				values.put("senha", recepcionista.getSenha());
-
-				try {
-					if (data != null) {
-						data.put(next, values);
-						mapper.writeValue(new File(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6)), data);
-					} else {
-						map.put(next, values);
-						mapper.writeValue(new File(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6)), map);
-					}
-
-				} catch (IOException e1) {
-					throw new Exception("Erro ao realizar cadastro!");
-				}
+				Json.writeValue(recepcionista);
 				break;
 			case Update:
-				values.put("cpf", recepcionista.getCpf());
-				values.put("nome", recepcionista.getNome());
-				values.put("email", recepcionista.getEmail());
-				values.put("endereco", recepcionista.getEndereco());
-				values.put("telefone", recepcionista.getTelefone());
-				values.put("senha", recepcionista.getSenha());
-
-				data.replace(key, values);
-				int t = 1;
-				try {
-					mapper.writeValue(new File(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6)), data);
-				} catch (IOException e1) {
-					throw new Exception("Erro ao atualizar cadastro!");
-				}
+				Json.updateValue(recepcionista, key);
 				break;
 			case Delete:
-
-				data.remove(key);
-				try {
-					mapper.writeValue(new File(RecepcionistaController.class.getResource("Recepcionista.json").toString().substring(6)), data);
-				} catch (IOException e1) {
-					throw new Exception("Erro ao excluir cadastro!");
-				}
+				Json.deleteValue(key, Persons.Recepcionista);
 				break;
 		}
-
-	}
-
-	public void generateAlert(String message) {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Information Dialog");
-		alert.setHeaderText(null);
-		alert.setContentText(message);
-
-		alert.showAndWait();
-	}
-
-	private boolean generateConfirmationDialog(String message) {
-		Alert alert = new Alert(AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO);
-		alert.showAndWait();
-
-		if (alert.getResult() == ButtonType.YES) {
-			return true;
-		}
-		return false;
 	}
 
 	private void setVisibleText(Recepcionista recepcionista) {
@@ -296,7 +126,7 @@ public class RecepcionistaController {
 		this.telefone.setText("");
 	}
 
-	public void goBack(ActionEvent actionEvent) throws IOException {
+	public void goBack() throws IOException {
 		App.setRoot("Calendario");
 	}
 }
