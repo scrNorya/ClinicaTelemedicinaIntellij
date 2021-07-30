@@ -5,24 +5,11 @@ package org.example.model;
  * @version 1.0
  * @created 18-jul-2021 15:43:13
  */
-public class Recepcionista extends Pessoa {
-
-	private String senha;
+public class Recepcionista extends Funcionario {
 
 	public Recepcionista(String nome, String cpf, long telefone, String email, String endereco,
 						 String senha){
-		super(nome, cpf, telefone, email, endereco);
-		this.senha = senha;
+		super(nome, cpf, telefone, email, endereco, senha);
 	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-
 
 }//end Recepcionista

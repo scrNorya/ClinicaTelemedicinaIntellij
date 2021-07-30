@@ -1,31 +1,52 @@
 package org.example;
-
 import java.io.IOException;
-import java.util.Map;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import org.example.utils.JsonUtils;
+import org.example.model.Medico;
+import org.example.model.Recepcionista;
+import org.example.utils.Json;
+import org.example.utils.Persons;
+import org.example.utils.Validations;
+import org.example.utils.View;;
+
 
 public class LoginController {
-	
-	@FXML private TextField username;
-	
-	@FXML private PasswordField password;
-	
-	
-	public void login(ActionEvent e) {
-		Map<String, Object> data = JsonUtils.readValues(LoginController.class.getResource("Recepcionista.json").toString().substring(6));
 
+	@FXML private TextField username;
+
+	@FXML private PasswordField password;
+
+	private Recepcionista recepcionista = null;
+
+	private Medico medico = null;
+
+	public void login() {
+
+		try {
+			if(Validations.isCpf(username.getText()) && Validations.isValidPassword(password.getText())) {
+				recepcionista = (Recepcionista) Json.findByCPF(username.getText(), Persons.Recepcionista);
+				if(recepcionista != null  && recepcionista.getSenha().equals(password.getText())) {
+					switchToRecepcionista();
+				} else {
+					medico = (Medico) Json.findByCPF(username.getText(), Persons.Medico);
+					if(medico != null && medico.getSenha().equals(password.getText())) {
+						switchToMedico();
+					} else {
+						View.generateAlert("CPF ou senha incorretos");
+					}
+				}
+			}
+		} catch (Exception e) {
+			View.generateAlert(e.getMessage());
+		}
 	}
-	
-	public void switchToMedico(ActionEvent e) throws IOException {
+
+	public void switchToMedico() throws IOException {
 		App.setRoot("Agenda");
 	}
-	
-	public void switchToRecepcionista(ActionEvent e) throws IOException {
+
+	public void switchToRecepcionista() throws IOException {
 		App.setRoot("Calendario");
 	}
 }

@@ -6,35 +6,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @version 1.0
  * @created 18-jul-2021 15:43:26
  */
-public class Medico extends Pessoa {
+public class Medico extends Funcionario {
 
-	private long CRM;
-	private String senha;
+	private long crm;
 	//private Agenda agenda;
 
-	public Medico(String nome, String cpf, long userCRM, long telefone, String email, String endereco,
+	public Medico(String nome, String cpf, long userCrm, long telefone, String email, String endereco,
 				  String senha){
-		super(nome, cpf, telefone, email, endereco);
-		this.CRM = userCRM;
-		this.senha = senha;
+		super(nome, cpf, telefone, email, endereco, senha);
+		this.crm = userCrm;
 	}
 
-	public long getCRM() {
-		return CRM;
+	public long getCrm() {
+		return crm;
 	}
 
 	public void setCrm(long CRM) {
-		this.CRM = CRM;
+		this.crm = crm;
 	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-
-
 }//end Medico
