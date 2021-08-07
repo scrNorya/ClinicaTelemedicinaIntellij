@@ -9,7 +9,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.example.model.Funcionario;
-import org.example.utils.Persons;
+import org.example.utils.JsonType;
 
 public class EmailController {
     Session session;
@@ -24,7 +24,7 @@ public class EmailController {
         session = Session.getDefaultInstance(props);
     }
 
-    public void sendConfirmation(Funcionario funcionario, Persons personType) {
+    public void sendConfirmation(Funcionario funcionario, JsonType personType) {
         String email = "disclinicadisc@gmail.com";
         String senha = "Aps21dahora";
         String destinationEmail = funcionario.getEmail();

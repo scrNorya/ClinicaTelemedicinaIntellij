@@ -21,7 +21,7 @@ public class MedicoController {
 
     public Medico findByCPF() throws Exception {
         String cpf = this.findCPF.getText();
-        Medico medico = (Medico) Json.findByCPF(cpf, Persons.Medico);
+        Medico medico = (Medico) Json.findByCPF(cpf, JsonType.Medico);
         if (medico != null) {
             this.setVisibleText(medico);
             return medico;
@@ -51,7 +51,7 @@ public class MedicoController {
                 userEndereco = endereco.getText();
                 userTelefone = Long.parseLong(telefone.getText());
 
-                Map.Entry<String, Object> MedicoEntry = Json.findEntryByCpf(userCpf, Persons.Medico);
+                Map.Entry<String, Object> MedicoEntry = Json.findEntryByCpf(userCpf, JsonType.Medico);
                 Medico medico;
                 if (MedicoEntry != null) {
                     Map<String, Object> medicoMap = (Map<String, Object>) MedicoEntry.getValue();
@@ -67,7 +67,7 @@ public class MedicoController {
                     medico = new Medico(userName, userCpf, userCRM, userTelefone, userEmail,
                             userEndereco, userSenha);
                     this.persistMedico(medico, null, Actions.Create);
-                    emailController.sendConfirmation(medico, Persons.Medico);
+                    emailController.sendConfirmation(medico, JsonType.Medico);
                     View.generateAlert("Cadastro realizado com sucesso!");
                 }
             } else {
@@ -83,7 +83,7 @@ public class MedicoController {
             if (Validations.isCpf(CPF.getText())) {
                 if(View.generateConfirmationDialog("Deseja excluir o cadastro?")) {
                     String userCpf = CPF.getText();
-                    Map.Entry<String, Object> value = Json.findEntryByCpf(userCpf, Persons.Medico);
+                    Map.Entry<String, Object> value = Json.findEntryByCpf(userCpf, JsonType.Medico);
                     if (value != null) {
                         this.persistMedico(null, value.getKey(), Actions.Delete);
                         View.generateAlert("Cadastro excluído");
@@ -108,7 +108,7 @@ public class MedicoController {
                 Json.updateValue(medico, key);
                 break;
             case Delete:
-                Json.deleteValue(key, Persons.Medico);
+                Json.deleteValue(key, JsonType.Medico);
                 break;
         }
     }

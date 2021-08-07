@@ -31,6 +31,10 @@ public class CalendarioController implements Initializable {
 		App.setRoot("CadastroMedico");
 	}
 
+	public void createPaciente() throws IOException {
+		App.setRoot("CadastroPaciente");
+	}
+
 	public class Hora {
 		private final String hora;
 

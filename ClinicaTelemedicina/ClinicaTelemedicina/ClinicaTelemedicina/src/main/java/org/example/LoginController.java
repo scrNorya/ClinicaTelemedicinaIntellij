@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 import org.example.model.Medico;
 import org.example.model.Recepcionista;
 import org.example.utils.Json;
-import org.example.utils.Persons;
+import org.example.utils.JsonType;
 import org.example.utils.Validations;
 import org.example.utils.View;;
 
@@ -25,11 +25,11 @@ public class LoginController {
 
 		try {
 			if(Validations.isCpf(username.getText()) && Validations.isValidPassword(password.getText())) {
-				recepcionista = (Recepcionista) Json.findByCPF(username.getText(), Persons.Recepcionista);
+				recepcionista = (Recepcionista) Json.findByCPF(username.getText(), JsonType.Recepcionista);
 				if(recepcionista != null  && recepcionista.getSenha().equals(password.getText())) {
 					switchToRecepcionista();
 				} else {
-					medico = (Medico) Json.findByCPF(username.getText(), Persons.Medico);
+					medico = (Medico) Json.findByCPF(username.getText(), JsonType.Medico);
 					if(medico != null && medico.getSenha().equals(password.getText())) {
 						switchToMedico();
 					} else {

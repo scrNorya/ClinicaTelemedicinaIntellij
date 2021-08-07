@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.model.Medico;
+import org.example.model.Paciente;
 import org.example.model.Pessoa;
 import org.example.model.Recepcionista;
 public class Json {
@@ -22,7 +23,7 @@ public class Json {
         return defaultObjectMapper;
     }
 
-    public static Map<String, Object> readValues(Persons person) throws URISyntaxException, IOException {
+    public static Map<String, Object> readValues(JsonType person) throws URISyntaxException, IOException {
         BufferedReader br;
 
         br = new BufferedReader(new FileReader(person.getPath()));
@@ -30,8 +31,22 @@ public class Json {
         return objectMapper.readValue(br, Map.class);
     }
 
+    public static void writeValue(Paciente paciente) throws URISyntaxException, IOException {
+        Map<String, Object> json = readValues(JsonType.Paciente);
+        Map<String, Object> values = new HashMap<>();
+
+        values.put("cpf", paciente.getCpf());
+        values.put("nome", paciente.getNome());
+        values.put("email", paciente.getEmail());
+        values.put("endereco", paciente.getEndereco());
+        values.put("telefone", paciente.getTelefone());
+
+        json.put(UUID.randomUUID().toString(), values);
+        objectMapper.writeValue(new File(JsonType.Paciente.getPath()), json);
+    }
+
     public static void writeValue(Recepcionista recepcionista) throws URISyntaxException, IOException {
-        Map<String, Object> json = readValues(Persons.Recepcionista);
+        Map<String, Object> json = readValues(JsonType.Recepcionista);
         Map<String, Object> values = new HashMap<>();
 
         values.put("cpf", recepcionista.getCpf());
@@ -42,11 +57,12 @@ public class Json {
         values.put("senha", recepcionista.getSenha());
 
         json.put(UUID.randomUUID().toString(), values);
-        objectMapper.writeValue(new File(Persons.Recepcionista.getPath()), json);
+        objectMapper.writeValue(new File(JsonType.Recepcionista.getPath()), json);
     }
 
+
     public static void writeValue(Medico medico) throws URISyntaxException, IOException {
-        Map<String, Object> json = readValues(Persons.Medico);
+        Map<String, Object> json = readValues(JsonType.Medico);
         Map<String, Object> values = new HashMap<>();
 
         values.put("cpf", medico.getCpf());
@@ -58,11 +74,25 @@ public class Json {
         values.put("senha", medico.getSenha());
 
         json.put(String.valueOf(UUID.randomUUID().toString()), values);
-        objectMapper.writeValue(new File(Persons.Medico.getPath()), json);
+        objectMapper.writeValue(new File(JsonType.Medico.getPath()), json);
+    }
+
+    public static void updateValue(Paciente paciente, String key) throws URISyntaxException, IOException {
+        Map<String, Object> json = readValues(JsonType.Recepcionista);
+        Map<String, Object> values = new HashMap<>();
+
+        values.put("cpf", paciente.getCpf());
+        values.put("nome", paciente.getNome());
+        values.put("email", paciente.getEmail());
+        values.put("endereco", paciente.getEndereco());
+        values.put("telefone", paciente.getTelefone());
+
+        json.replace(key, values);
+        objectMapper.writeValue(new File(JsonType.Recepcionista.getPath()), json);
     }
 
     public static void updateValue(Recepcionista recepcionista, String key) throws URISyntaxException, IOException {
-        Map<String, Object> json = readValues(Persons.Recepcionista);
+        Map<String, Object> json = readValues(JsonType.Recepcionista);
         Map<String, Object> values = new HashMap<>();
 
         values.put("cpf", recepcionista.getCpf());
@@ -73,11 +103,11 @@ public class Json {
         values.put("senha", recepcionista.getSenha());
 
         json.replace(key, values);
-        objectMapper.writeValue(new File(Persons.Recepcionista.getPath()), json);
+        objectMapper.writeValue(new File(JsonType.Recepcionista.getPath()), json);
     }
 
     public static void updateValue(Medico medico, String key) throws URISyntaxException, IOException {
-        Map<String, Object> json = readValues(Persons.Recepcionista);
+        Map<String, Object> json = readValues(JsonType.Recepcionista);
         Map<String, Object> values = new HashMap<>();
 
         values.put("cpf", medico.getCpf());
@@ -89,26 +119,22 @@ public class Json {
         values.put("senha", medico.getSenha());
 
         json.replace(key, values);
-        objectMapper.writeValue(new File(Persons.Medico.getPath()), json);
+        objectMapper.writeValue(new File(JsonType.Medico.getPath()), json);
     }
 
-    public static void deleteValue(String key, Persons personType) throws URISyntaxException, IOException {
-        Map<String, Object> json = readValues(personType);
+    public static void deleteValue(String key, JsonType jsonType) throws URISyntaxException, IOException {
+        Map<String, Object> json = readValues(jsonType);
         json.remove(key);
-        if (personType == Persons.Recepcionista) {
-            objectMapper.writeValue(new File(Persons.Recepcionista.getPath()), json);
-        } else if(personType == Persons.Medico) {
-            objectMapper.writeValue(new File(Persons.Medico.getPath()), json);
-        }
+        objectMapper.writeValue(new File(jsonType.getPath()), json);
     }
 
-    public static Pessoa findByCPF(String cpf, Persons personType) throws Exception {
+    public static Pessoa findByCPF(String cpf, JsonType jsonType) throws Exception {
         Pessoa pessoa;
 
         if (Validations.isCpf(cpf)) {
-            Map<String, Object> json = readValues(personType);
+            Map<String, Object> json = readValues(jsonType);
 
-            if (personType == Persons.Recepcionista) {
+            if (jsonType == JsonType.Recepcionista) {
                 for (Map.Entry<String, Object> entry : json.entrySet()) {
                     Map<String, Object> values = (Map<String, Object>) entry.getValue();
                     if (cpf.equals(values.get("cpf"))) {
@@ -119,7 +145,7 @@ public class Json {
                         return pessoa;
                     }
                 }
-            } else if (personType == Persons.Medico) {
+            } else if (jsonType == JsonType.Medico) {
                 for (Map.Entry<String, Object> entry : json.entrySet()) {
                     Map<String, Object> values = (Map<String, Object>) entry.getValue();
                     if (cpf.equals(values.get("cpf"))) {
@@ -131,13 +157,23 @@ public class Json {
                         return pessoa;
                     }
                 }
+            } else {
+                for (Map.Entry<String, Object> entry : json.entrySet()) {
+                    Map<String, Object> values = (Map<String, Object>) entry.getValue();
+                    if (cpf.equals(values.get("cpf"))) {
+                        long telefoneValue = Long.parseLong(values.get("telefone").toString());
+                        pessoa = new Paciente(values.get("nome").toString(), cpf, telefoneValue,
+                                values.get("email").toString(), values.get("endereco").toString());
+                        return pessoa;
+                    }
+                }
             }
         }
         return null;
     }
 
-    public static Map.Entry<String, Object> findEntryByCpf(String cpf, Persons personType) throws URISyntaxException, IOException {
-        Map<String, Object> json = readValues(personType);
+    public static Map.Entry<String, Object> findEntryByCpf(String cpf, JsonType jsonType) throws URISyntaxException, IOException {
+        Map<String, Object> json = readValues(jsonType);
         Map.Entry<String, Object> entry = null;
         Map<String, Object> values;
 
@@ -151,22 +187,5 @@ public class Json {
             }
         }
         return entry;
-    }
-
-    public static Pessoa parseEntryToPessoa(Map.Entry<String, Object> pessoaEntry, Persons personType) {
-        Pessoa pessoa = null;
-        Map <String, Object> pessoaMap = (Map <String, Object>) pessoaEntry.getValue();
-        if(personType == Persons.Recepcionista) {
-            pessoa = new Recepcionista(pessoaMap.get("nome").toString(), pessoaMap.get("cpf").toString(),
-                    Long.parseLong(pessoaMap.get("telefone").toString()), pessoaMap.get("email").toString(),
-                    pessoaMap.get("endereco").toString(), pessoaMap.get("senha").toString());
-        } else if (personType == Persons.Medico) {
-            pessoa = new Medico(pessoaMap.get("nome").toString(), pessoaMap.get("cpf").toString(),
-                    Long.parseLong(pessoaMap.get("CRM").toString()),
-                    Long.parseLong(pessoaMap.get("telefone").toString()), pessoaMap.get("email").toString(),
-                    pessoaMap.get("endereco").toString(), pessoaMap.get("senha").toString());
-        }
-
-        return pessoa;
     }
 }
