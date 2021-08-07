@@ -14,16 +14,19 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
+    private static Stage stage;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("login"), 640, 480);
+        App.stage = stage;
+        scene = new Scene(loadFXML("Login"), 700, 480);
         stage.setScene(scene);
         stage.show();
     }
 
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
+        stage.setTitle(fxml.replaceAll("\\d+", "").replaceAll("(.)([A-Z])", "$1 $2"));
     }
 
     private static Parent loadFXML(String fxml) throws IOException {

@@ -17,7 +17,7 @@ public class CalendarioController implements Initializable {
 
 	public void logout() {
 		try {
-			App.setRoot("login");
+			App.setRoot("Login");
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

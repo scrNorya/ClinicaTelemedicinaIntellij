@@ -4,6 +4,6 @@ import java.io.IOException;
 
 public class AgendaController {
 	public void logout() throws IOException {
-		App.setRoot("login");
+		App.setRoot("Login");
 	}
 }
