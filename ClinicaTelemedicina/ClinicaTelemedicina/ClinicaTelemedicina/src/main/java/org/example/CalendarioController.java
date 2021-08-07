@@ -19,4 +19,8 @@ public class CalendarioController {
 	public void createMedico() throws IOException {
 		App.setRoot("CadastroMedico");
 	}
+
+	public void createPaciente() throws IOException {
+		App.setRoot("CadastroPaciente");
+	}
 }

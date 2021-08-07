@@ -20,7 +20,7 @@ public class RecepcionistaController {
 
 	public Recepcionista findByCPF() throws Exception {
 		String cpf = this.findCPF.getText();
-		Recepcionista recepcionista = (Recepcionista) Json.findByCPF(cpf, Persons.Recepcionista);
+		Recepcionista recepcionista = (Recepcionista) Json.findByCPF(cpf, JsonType.Recepcionista);
 		if (recepcionista != null) {
 			this.setVisibleText(recepcionista);
 			return recepcionista;
@@ -48,7 +48,7 @@ public class RecepcionistaController {
 				userEndereco = endereco.getText();
 				userTelefone = Long.parseLong(telefone.getText());
 
-				Map.Entry<String, Object> recepcionistaEntry = Json.findEntryByCpf(userCpf, Persons.Recepcionista);
+				Map.Entry<String, Object> recepcionistaEntry = Json.findEntryByCpf(userCpf, JsonType.Recepcionista);
 				Recepcionista recepcionista;
 				if (recepcionistaEntry != null) {
 					Map<String, Object> recepcionistaMap = (Map<String, Object>) recepcionistaEntry.getValue();
@@ -64,7 +64,7 @@ public class RecepcionistaController {
 					recepcionista = new Recepcionista(userName, userCpf, userTelefone, userEmail,
 							userEndereco, userSenha);
 					this.persistRecepcionista(recepcionista, null, Actions.Create);
-					emailController.sendConfirmation(recepcionista, Persons.Recepcionista);
+					emailController.sendConfirmation(recepcionista, JsonType.Recepcionista);
 					View.generateAlert("Cadastro realizado com sucesso!");
 				}
 			} else {
@@ -80,7 +80,7 @@ public class RecepcionistaController {
 			if (Validations.isCpf(CPF.getText())) {
 				if(View.generateConfirmationDialog("Deseja excluir o cadastro?")) {
 					String userCpf = CPF.getText();
-					Map.Entry<String, Object> value = Json.findEntryByCpf(userCpf, Persons.Recepcionista);
+					Map.Entry<String, Object> value = Json.findEntryByCpf(userCpf, JsonType.Recepcionista);
 					if (value != null) {
 						this.persistRecepcionista(null, value.getKey(), Actions.Delete);
 						View.generateAlert("Cadastro excluído");
@@ -105,7 +105,7 @@ public class RecepcionistaController {
 				Json.updateValue(recepcionista, key);
 				break;
 			case Delete:
-				Json.deleteValue(key, Persons.Recepcionista);
+				Json.deleteValue(key, JsonType.Recepcionista);
 				break;
 		}
 	}
