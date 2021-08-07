@@ -25,18 +25,16 @@
             <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="1" GridPane.rowSpan="6">
-              <columns>
-                <TableColumn prefWidth="67.0" text="SEGUNDA" />
-                <TableColumn prefWidth="67.0" text="TERÇA" />
-                  <TableColumn prefWidth="67.0" text="QUARTA" />
-                  <TableColumn prefWidth="67.0" text="QUINTA" />
-                  <TableColumn prefWidth="67.0" text="SEXTA" />
-                  <TableColumn prefWidth="67.0" text="SÁBADO" />
-                  <TableColumn minWidth="0.0" prefWidth="0.0" text="DOMINGO" />
-                  <TableColumn prefWidth="75.0" text="DOMINGO" />
-              </columns>
-            </TableView>
+             <TableView fx:id="Calendar" layoutX="73.0" layoutY="48.0" onMouseClicked="#clickItem" prefHeight="305.0" prefWidth="454.0" GridPane.columnSpan="4" GridPane.rowIndex="1" GridPane.rowSpan="6">
+                 <columns>
+                     <TableColumn fx:id="hora" maxWidth="75.0" minWidth="66.0" prefWidth="66.0" text="----" />
+                     <TableColumn fx:id="MONDAY" maxWidth="85.0" minWidth="75.0" prefWidth="85.0" text="Segunda" />
+                     <TableColumn fx:id="TUESDAY" maxWidth="85.0" minWidth="75.0" prefWidth="85.0" text="Terça" />
+                     <TableColumn fx:id="WEDNESDAY" maxWidth="85.0" minWidth="75.0" prefWidth="85.0" text="Quarta" />
+                     <TableColumn fx:id="THURSDAY" maxWidth="85.0" minWidth="75.0" prefWidth="85.0" text="Quinta" />
+                     <TableColumn fx:id="FRIDAY" maxWidth="85.0" minWidth="75.0" prefWidth="85.0" text="Sexta" />
+                 </columns>
+             </TableView>
             <Button maxHeight="40.0" maxWidth="140.0" minHeight="40.0" minWidth="140.0" mnemonicParsing="false" text="Buscar" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
                <GridPane.margin>
                   <Insets />
