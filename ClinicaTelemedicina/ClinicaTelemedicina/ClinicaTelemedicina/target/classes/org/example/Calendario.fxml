@@ -42,9 +42,9 @@
             <Button maxHeight="30.0" maxWidth="140.0" minHeight="30.0" minWidth="140.0" mnemonicParsing="false" onAction="#createRecepcionista" text="Cadastrar recepcionista" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
             <Button maxHeight="30.0" maxWidth="140.0" minHeight="30.0" minWidth="140.0" mnemonicParsing="false" onAction="#createMedico" text="Cadastrar médico" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
             <Button maxHeight="30.0" maxWidth="140.0" minHeight="30.0" minWidth="140.0" mnemonicParsing="false" onAction="#createPaciente" text="Cadastrar paciente" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-            <ComboBox prefHeight="25.0" prefWidth="270.0" promptText="Selecione o médico" GridPane.columnSpan="2" />
             <Button mnemonicParsing="false" onAction="#previousWeek" text="&lt;" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
             <Button mnemonicParsing="false" onAction="#nextWeek" text="&gt;" GridPane.columnIndex="3" GridPane.halignment="RIGHT" />
+            <ComboBox fx:id="medicoComboBox" onAction="#onChangeMedico" prefHeight="25.0" prefWidth="270.0" promptText="Selecione o médico" GridPane.columnSpan="2" />
             <Button maxHeight="30.0" maxWidth="140.0" minHeight="30.0" minWidth="140.0" mnemonicParsing="false" text="Agendar" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
             <Button maxHeight="30.0" maxWidth="140.0" minHeight="30.0" minWidth="140.0" mnemonicParsing="false" onAction="#logout" prefWidth="142.0" text="Sair" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
          </children>

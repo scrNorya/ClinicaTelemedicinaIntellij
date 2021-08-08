@@ -5,14 +5,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import org.example.utils.View;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,7 +32,7 @@ public class CalendarioController implements Initializable {
 			e1.printStackTrace();
 		}
 	}
-	
+
 	public void createRecepcionista() throws IOException {
 		App.setRoot("CadastroRecepcionista");
 	}
@@ -49,23 +52,25 @@ public class CalendarioController implements Initializable {
 
 	public void nextWeek(ActionEvent actionEvent) {
 		day = day.plusDays(7);
-		System.out.println(day);
 		init();
 	}
 
 	public class Hora {
+
 		private final String hora;
 
 		public Hora(String hora) {
 			this.hora = hora;
 		}
-
 		public String getHora() {
 			return hora;
 		}
-	}
 
-	@FXML private TableView<Hora> calendar;
+
+	}
+	@FXML private TableView<Hora> calendar = new TableView<>();
+
+	TableView.TableViewSelectionModel<Hora> defaultSelectionModel = calendar.getSelectionModel();
 
 	@FXML private TableColumn<Hora, String> hora;
 
@@ -78,6 +83,8 @@ public class CalendarioController implements Initializable {
 	@FXML private TableColumn<Hora, String> THURSDAY;
 
 	@FXML private TableColumn<Hora, String> FRIDAY;
+
+	@FXML private ComboBox<String> medicoComboBox;
 
 	ObservableList<Hora> list = FXCollections.observableArrayList(
 			new Hora("08:00"),
@@ -93,6 +100,10 @@ public class CalendarioController implements Initializable {
 	);
 
 	public void init(){
+		calendar.setItems(list);
+		defaultSelectionModel = calendar.getSelectionModel();
+		calendar.setSelectionModel(null);
+		medicoComboBox.setItems(medicosList);
 		hora.setCellValueFactory(new PropertyValueFactory<Hora, String>("hora"));
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -107,20 +118,45 @@ public class CalendarioController implements Initializable {
 		FRIDAY.setText("SEXTA\n" +
 				day.with(DayOfWeek.FRIDAY).format(formatter));
 
-		calendar.setItems(list);
+		calendar.getColumns().addListener(new ListChangeListener() {
+			@Override
+			public void onChanged(Change change) {
+				change.next();
+				if (change.wasReplaced()) {
+					calendar.getColumns().clear();
+					calendar.getColumns().addAll(hora, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY);
+				}
+			}
+		});
 	}
 
+
+	// TODO <<<<<<<<<<<PEGAR DADOS DO JSON PARA A MEDICOSLIST!!!!!!>>>>>>>>>>>>
+
+	ObservableList<String> medicosList = FXCollections.observableArrayList("Teste", "teste 1", "teste 2", "teste3");
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
 		init();
 	}
 
+	public void onChangeMedico(ActionEvent actionEvent) {
+		if(medicoComboBox.getValue() != null) {
+			calendar.setSelectionModel(defaultSelectionModel);
+			calendar.getSelectionModel().setCellSelectionEnabled(true);
+		}
+	}
+
 	@FXML
 	public void clickItem(MouseEvent event) {
-		if(event.getClickCount() == 2) {
-			System.out.print(calendar.getSelectionModel().getSelectedItem().getHora());
-			System.out.print(" ");
-			System.out.println((calendar.getFocusModel().getFocusedCell().getTableColumn().getId()));
+		String id = calendar.getFocusModel().getFocusedCell().getTableColumn().getId();
+		if (medicoComboBox.getValue()!=null) {
+			if (!id.equals("hora")) {
+				System.out.println(calendar.getSelectionModel().getSelectedItem().getHora());
+				System.out.println((calendar.getFocusModel().getFocusedCell().getTableColumn().getId()));
+			}
+		} else {
+			calendar.setSelectionModel(null);
+			View.generateAlert("Selecione um medico");
 		}
 	}
 }
