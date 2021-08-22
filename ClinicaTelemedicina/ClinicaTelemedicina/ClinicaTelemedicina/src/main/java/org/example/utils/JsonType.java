@@ -11,7 +11,7 @@ public enum JsonType {
     Paciente;
 
     public String getPath() throws URISyntaxException {
-        if(Verifications.isRunningFromJar()) {
+        if(JarUtils.isRunningFromJar()) {
             File ref = new File(JsonType.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             return ref.getParentFile().toURI().getPath() + "Dados/" + this + ".json";
         } else {

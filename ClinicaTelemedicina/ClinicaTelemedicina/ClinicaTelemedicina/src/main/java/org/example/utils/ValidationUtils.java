@@ -5,7 +5,7 @@ import java.util.InputMismatchException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-public class Validations {
+public class ValidationUtils {
 
 	public static boolean isValidEmail(String email) throws Exception {
 		if (email != null) {
@@ -52,7 +52,7 @@ public class Validations {
 	}
 
 	public static boolean isTelefoneValid (String telefone) throws Exception {
-		if(!telefone.isEmpty() && telefone != null) {
+		if(!telefone.isEmpty() && telefone != null && telefone.matches("[0-9]+")) {
 			return true;
 		}
 		throw new Exception("Telefone invalido");

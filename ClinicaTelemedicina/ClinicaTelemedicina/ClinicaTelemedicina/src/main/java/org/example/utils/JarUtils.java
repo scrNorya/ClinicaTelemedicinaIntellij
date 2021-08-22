@@ -1,8 +1,8 @@
 package org.example.utils;
 
-public class Verifications {
+public class JarUtils {
     public static boolean isRunningFromJar() {
-        String classJar = Verifications.class.getResource("Verifications.class").toString();
+        String classJar = JarUtils.class.getResource("jarUtils.class").toString();
         if (classJar.startsWith("jar:")) {
             return true;
         }

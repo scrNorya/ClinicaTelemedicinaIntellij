@@ -15,7 +15,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import org.example.utils.View;
+import org.example.utils.ViewUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -161,7 +161,7 @@ public class CalendarioController implements Initializable {
 			}
 		} else {
 			calendar.setSelectionModel(null);
-			View.generateAlert("Selecione um medico");
+			ViewUtils.generateAlert("Selecione um medico");
 		}
 	}
 }
