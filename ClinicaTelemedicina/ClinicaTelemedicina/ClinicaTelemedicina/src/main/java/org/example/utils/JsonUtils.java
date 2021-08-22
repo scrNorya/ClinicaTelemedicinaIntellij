@@ -9,7 +9,7 @@ import org.example.model.Medico;
 import org.example.model.Paciente;
 import org.example.model.Pessoa;
 import org.example.model.Recepcionista;
-public class Json {
+public class JsonUtils {
 
     private static ObjectMapper objectMapper = getDefaultObjectMapper();
 
@@ -131,7 +131,7 @@ public class Json {
     public static Pessoa findByCPF(String cpf, JsonType jsonType) throws Exception {
         Pessoa pessoa;
 
-        if (Validations.isCpf(cpf)) {
+        if (ValidationUtils.isCpf(cpf)) {
             Map<String, Object> json = readValues(jsonType);
 
             if (jsonType == JsonType.Recepcionista) {
@@ -163,13 +163,14 @@ public class Json {
                     if (cpf.equals(values.get("cpf"))) {
                         long telefoneValue = Long.parseLong(values.get("telefone").toString());
                         pessoa = new Paciente(values.get("nome").toString(), cpf, telefoneValue,
-                                values.get("email").toString(), values.get("endereco").toString());
+                                values.get("email").toString(), values.get("endereco").toString(), null);
+                        //TODO pessoa consultas
                         return pessoa;
                     }
                 }
             }
         }
-        return null;
+        throw new Exception("CPF não encontrado");
     }
 
     public static Map.Entry<String, Object> findEntryByCpf(String cpf, JsonType jsonType) throws URISyntaxException, IOException {
