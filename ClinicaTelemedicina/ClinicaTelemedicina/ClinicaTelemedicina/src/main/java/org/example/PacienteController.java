@@ -4,14 +4,12 @@ import java.net.URISyntaxException;
 import java.util.Map;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import org.example.model.Consulta;
 import org.example.utils.*;
 import org.example.model.Paciente;
 
 public class PacienteController {
 
     @FXML private TextField name;
-    @FXML private TextField CPF;
     @FXML private TextField email;
     @FXML private TextField endereco;
     @FXML private TextField telefone;
@@ -27,10 +25,6 @@ public class PacienteController {
         }
     }
 
-    public Consulta[] getConsultasByPacienteCPF(String cpf){
-        return null;
-    }
-
     public void savePaciente() {
         String userCpf = "";
         String userEmail = "";
@@ -39,12 +33,12 @@ public class PacienteController {
         long userTelefone = 0;
 
         try {
-            if (ValidationUtils.isValidName(name.getText()) && ValidationUtils.isCpf(CPF.getText()) &&
+            if (ValidationUtils.isValidName(name.getText()) && ValidationUtils.isCpf(findCPF.getText()) &&
                     ValidationUtils.isValidEmail(email.getText()) && ValidationUtils.isEnderecoValid(endereco.getText())
                     && ValidationUtils.isTelefoneValid(telefone.getText())
             ) {
                 userName = name.getText();
-                userCpf = CPF.getText();
+                userCpf = findCPF.getText();
                 userEmail = email.getText();
                 userEndereco = endereco.getText();
                 userTelefone = Long.parseLong(telefone.getText());
@@ -76,16 +70,16 @@ public class PacienteController {
 
     public void deleletePaciente() {
         try {
-            if (ValidationUtils.isCpf(CPF.getText())) {
+            if (ValidationUtils.isCpf(findCPF.getText())) {
                 if(ViewUtils.generateConfirmationDialog("Deseja excluir o cadastro?")) {
-                    String userCpf = CPF.getText();
+                    String userCpf = findCPF.getText();
                     Map.Entry<String, Object> value = JsonUtils.findEntryByCpf(userCpf, JsonType.Paciente);
                     if (value != null) {
                         this.persistPaciente(null, value.getKey(), Actions.Delete);
                         ViewUtils.generateAlert("Cadastro excluído");
                         this.resetText();
                     } else {
-                        throw new Exception("Paciente não cadastrado");
+                        ViewUtils.generateAlert("Paciente não encontrado");
                     }
                 }
             }
@@ -110,7 +104,7 @@ public class PacienteController {
     }
 
     private void setVisibleText(Paciente paciente) {
-        this.CPF.setText(paciente.getCpf());
+        this.findCPF.setText(paciente.getCpf());
         this.email.setText(paciente.getEmail());
         this.endereco.setText(paciente.getEndereco());
         this.name.setText(paciente.getNome());
@@ -118,7 +112,7 @@ public class PacienteController {
     }
 
     private void resetText() {
-        this.CPF.setText("");
+        this.findCPF.setText("");
         this.email.setText("");
         this.endereco.setText("");
         this.name.setText("");
