@@ -47,12 +47,12 @@ public class CalendarioController implements Initializable {
 
 	public void previousWeek(ActionEvent actionEvent) {
 		day = day.minusDays(7);
-		init();
+		setColumns();
 	}
 
 	public void nextWeek(ActionEvent actionEvent) {
 		day = day.plusDays(7);
-		init();
+		setColumns();
 	}
 
 	public class PacienteConsulta {
@@ -149,6 +149,22 @@ public class CalendarioController implements Initializable {
 		calendar.setSelectionModel(null);
 		medicoComboBox.setItems(medicosList);
 		hora.setCellValueFactory(new PropertyValueFactory<PacienteConsulta, String>("hora"));
+
+		setColumns();
+
+		calendar.getColumns().addListener(new ListChangeListener() {
+			@Override
+			public void onChanged(Change change) {
+				change.next();
+				if (change.wasReplaced()) {
+					calendar.getColumns().clear();
+					calendar.getColumns().addAll(hora, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY);
+				}
+			}
+		});
+	}
+
+	public void setColumns(){
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 		MONDAY.setText("SEGUNDA\n" +
@@ -161,19 +177,6 @@ public class CalendarioController implements Initializable {
 				day.with(DayOfWeek.THURSDAY).format(formatter));
 		FRIDAY.setText("SEXTA\n" +
 				day.with(DayOfWeek.FRIDAY).format(formatter));
-
-
-
-		calendar.getColumns().addListener(new ListChangeListener() {
-			@Override
-			public void onChanged(Change change) {
-				change.next();
-				if (change.wasReplaced()) {
-					calendar.getColumns().clear();
-					calendar.getColumns().addAll(hora, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY);
-				}
-			}
-		});
 	}
 
 	// TODO <<<<<<<<<<<PEGAR DADOS DO JSON PARA A MEDICOSLIST!!!!!!>>>>>>>>>>>>
