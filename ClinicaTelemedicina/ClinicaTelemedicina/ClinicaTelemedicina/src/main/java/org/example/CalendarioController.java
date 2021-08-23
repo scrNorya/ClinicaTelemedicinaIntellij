@@ -15,7 +15,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import org.example.utils.View;
+import org.example.model.Consulta;
+import org.example.utils.ViewUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -118,6 +119,12 @@ public class CalendarioController implements Initializable {
 				}
 			}
 		});
+
+//		ObservableList<Consulta> observableList =FXCollections.observableArrayList(
+//				new Consulta("12345","2021-8-23","lalalalal","asfsagag", "07787552905","07787552905","14:00")
+//		);
+
+
 	}
 
 	public void setColumns(){
@@ -161,7 +168,7 @@ public class CalendarioController implements Initializable {
 			}
 		} else {
 			calendar.setSelectionModel(null);
-			View.generateAlert("Selecione um medico");
+			ViewUtils.generateAlert("Selecione um medico");
 		}
 	}
 }

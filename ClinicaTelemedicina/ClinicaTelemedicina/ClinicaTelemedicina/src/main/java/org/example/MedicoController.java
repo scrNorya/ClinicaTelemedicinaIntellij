@@ -21,12 +21,12 @@ public class MedicoController {
 
     public Medico findByCPF() throws Exception {
         String cpf = this.findCPF.getText();
-        Medico medico = (Medico) Json.findByCPF(cpf, JsonType.Medico);
+        Medico medico = (Medico) JsonUtils.findByCPF(cpf, JsonType.Medico);
         if (medico != null) {
             this.setVisibleText(medico);
             return medico;
         } else {
-            View.generateAlert("Cpf não encontrado!");
+            ViewUtils.generateAlert("Cpf não encontrado!");
         }
         return null;
     }
@@ -51,15 +51,15 @@ public class MedicoController {
                 userEndereco = endereco.getText();
                 userTelefone = Long.parseLong(telefone.getText());
 
-                Map.Entry<String, Object> MedicoEntry = Json.findEntryByCpf(userCpf, JsonType.Medico);
+                Map.Entry<String, Object> MedicoEntry = JsonUtils.findEntryByCpf(userCpf, JsonType.Medico);
                 Medico medico;
                 if (MedicoEntry != null) {
                     Map<String, Object> medicoMap = (Map<String, Object>) MedicoEntry.getValue();
                     medico = new Medico(userName, medicoMap.get("cpf").toString(),userCRM, userTelefone,
                             userEmail, userEndereco, medicoMap.get("senha").toString());
-                    if (View.generateConfirmationDialog("Deseja alterar o cadastro?")) {
+                    if (ViewUtils.generateConfirmationDialog("Deseja alterar o cadastro?")) {
                         this.persistMedico(medico, MedicoEntry.getKey(), Actions.Update);
-                        View.generateAlert("Cadastro atualizado com sucesso!");
+                        ViewUtils.generateAlert("Cadastro atualizado com sucesso!");
                         this.setVisibleText(medico);
                     }
                 } else {
@@ -68,25 +68,25 @@ public class MedicoController {
                             userEndereco, userSenha);
                     this.persistMedico(medico, null, Actions.Create);
                     emailController.sendConfirmation(medico, JsonType.Medico);
-                    View.generateAlert("Cadastro realizado com sucesso!");
+                    ViewUtils.generateAlert("Cadastro realizado com sucesso!");
                 }
             } else {
-                View.generateAlert("Verifique os dados inseridos e tente novamente");
+                ViewUtils.generateAlert("Verifique os dados inseridos e tente novamente");
             }
         } catch (Exception e) {
-            View.generateAlert(e.getMessage());
+            ViewUtils.generateAlert(e.getMessage());
         }
     }
 
     public void deleteMedico() {
         try {
             if (Validations.isCpf(CPF.getText())) {
-                if(View.generateConfirmationDialog("Deseja excluir o cadastro?")) {
+                if(ViewUtils.generateConfirmationDialog("Deseja excluir o cadastro?")) {
                     String userCpf = CPF.getText();
-                    Map.Entry<String, Object> value = Json.findEntryByCpf(userCpf, JsonType.Medico);
+                    Map.Entry<String, Object> value = JsonUtils.findEntryByCpf(userCpf, JsonType.Medico);
                     if (value != null) {
                         this.persistMedico(null, value.getKey(), Actions.Delete);
-                        View.generateAlert("Cadastro excluído");
+                        ViewUtils.generateAlert("Cadastro excluído");
                         this.resetText();
                     } else {
                         throw new Exception("Recepcionista não cadastrado");
@@ -94,7 +94,7 @@ public class MedicoController {
                 }
             }
         } catch (Exception e) {
-            View.generateAlert("Erro ao exluir cadastro!");
+            ViewUtils.generateAlert("Erro ao exluir cadastro!");
         }
     }
 
@@ -102,13 +102,13 @@ public class MedicoController {
             throws URISyntaxException, IOException {
         switch (action) {
             case Create:
-                Json.writeValue(medico);
+                JsonUtils.writeValue(medico);
                 break;
             case Update:
-                Json.updateValue(medico, key);
+                JsonUtils.updateValue(medico, key);
                 break;
             case Delete:
-                Json.deleteValue(key, JsonType.Medico);
+                JsonUtils.deleteValue(key, JsonType.Medico);
                 break;
         }
     }
@@ -129,6 +129,7 @@ public class MedicoController {
         this.endereco.setText("");
         this.name.setText("");
         this.telefone.setText("");
+
     }
 
     public void goBack() throws IOException {

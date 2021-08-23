@@ -20,12 +20,12 @@ public class RecepcionistaController {
 
 	public Recepcionista findByCPF() throws Exception {
 		String cpf = this.findCPF.getText();
-		Recepcionista recepcionista = (Recepcionista) Json.findByCPF(cpf, JsonType.Recepcionista);
+		Recepcionista recepcionista = (Recepcionista) JsonUtils.findByCPF(cpf, JsonType.Recepcionista);
 		if (recepcionista != null) {
 			this.setVisibleText(recepcionista);
 			return recepcionista;
 		} else {
-			View.generateAlert("Cpf não encontrado!");
+			ViewUtils.generateAlert("Cpf não encontrado!");
 		}
 		return null;
 	}
@@ -48,15 +48,15 @@ public class RecepcionistaController {
 				userEndereco = endereco.getText();
 				userTelefone = Long.parseLong(telefone.getText());
 
-				Map.Entry<String, Object> recepcionistaEntry = Json.findEntryByCpf(userCpf, JsonType.Recepcionista);
+				Map.Entry<String, Object> recepcionistaEntry = JsonUtils.findEntryByCpf(userCpf, JsonType.Recepcionista);
 				Recepcionista recepcionista;
 				if (recepcionistaEntry != null) {
 					Map<String, Object> recepcionistaMap = (Map<String, Object>) recepcionistaEntry.getValue();
 					recepcionista = new Recepcionista(userName, recepcionistaMap.get("cpf").toString(),
 							userTelefone, userEmail, userEndereco, recepcionistaMap.get("senha").toString());
-					if (View.generateConfirmationDialog("Deseja alterar o cadastro?")) {
+					if (ViewUtils.generateConfirmationDialog("Deseja alterar o cadastro?")) {
 						this.persistRecepcionista(recepcionista, recepcionistaEntry.getKey(), Actions.Update);
-						View.generateAlert("Cadastro atualizado com sucesso!");
+						ViewUtils.generateAlert("Cadastro atualizado com sucesso!");
 						this.setVisibleText(recepcionista);
 					}
 				} else {
@@ -65,25 +65,25 @@ public class RecepcionistaController {
 							userEndereco, userSenha);
 					this.persistRecepcionista(recepcionista, null, Actions.Create);
 					emailController.sendConfirmation(recepcionista, JsonType.Recepcionista);
-					View.generateAlert("Cadastro realizado com sucesso!");
+					ViewUtils.generateAlert("Cadastro realizado com sucesso!");
 				}
 			} else {
-				View.generateAlert("Verifique os dados inseridos e tente novamente");
+				ViewUtils.generateAlert("Verifique os dados inseridos e tente novamente");
 			}
 		} catch (Exception e) {
-			View.generateAlert(e.getMessage());
+			ViewUtils.generateAlert(e.getMessage());
 		}
 	}
 
 	public void deleleteRecepcionista() {
 		try {
 			if (Validations.isCpf(CPF.getText())) {
-				if(View.generateConfirmationDialog("Deseja excluir o cadastro?")) {
+				if(ViewUtils.generateConfirmationDialog("Deseja excluir o cadastro?")) {
 					String userCpf = CPF.getText();
-					Map.Entry<String, Object> value = Json.findEntryByCpf(userCpf, JsonType.Recepcionista);
+					Map.Entry<String, Object> value = JsonUtils.findEntryByCpf(userCpf, JsonType.Recepcionista);
 					if (value != null) {
 						this.persistRecepcionista(null, value.getKey(), Actions.Delete);
-						View.generateAlert("Cadastro excluído");
+						ViewUtils.generateAlert("Cadastro excluído");
 						this.resetText();
 					} else {
 						throw new Exception("Recepcionista não cadastrado");
@@ -91,7 +91,7 @@ public class RecepcionistaController {
 				}
 			}
 		} catch (Exception e) {
-			View.generateAlert("Erro ao exluir cadastro!");
+			ViewUtils.generateAlert("Erro ao exluir cadastro!");
 		}
 	}
 
@@ -99,13 +99,13 @@ public class RecepcionistaController {
 			throws URISyntaxException, IOException {
 		switch (action) {
 			case Create:
-				Json.writeValue(recepcionista);
+				JsonUtils.writeValue(recepcionista);
 				break;
 			case Update:
-				Json.updateValue(recepcionista, key);
+				JsonUtils.updateValue(recepcionista, key);
 				break;
 			case Delete:
-				Json.deleteValue(key, JsonType.Recepcionista);
+				JsonUtils.deleteValue(key, JsonType.Recepcionista);
 				break;
 		}
 	}

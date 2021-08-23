@@ -18,12 +18,12 @@ public class PacienteController {
 
     public Paciente findByCPF() throws Exception {
         String cpf = this.findCPF.getText();
-        Paciente paciente = (Paciente) Json.findByCPF(cpf, JsonType.Paciente);
+        Paciente paciente = (Paciente) JsonUtils.findByCPF(cpf, JsonType.Paciente);
         if (paciente != null) {
             this.setVisibleText(paciente);
             return paciente;
         } else {
-            View.generateAlert("Cpf não encontrado!");
+            ViewUtils.generateAlert("Cpf não encontrado!");
         }
         return null;
     }
@@ -46,40 +46,40 @@ public class PacienteController {
                 userEndereco = endereco.getText();
                 userTelefone = Long.parseLong(telefone.getText());
 
-                Map.Entry<String, Object> pacienteEntry = Json.findEntryByCpf(userCpf, JsonType.Paciente);
+                Map.Entry<String, Object> pacienteEntry = JsonUtils.findEntryByCpf(userCpf, JsonType.Paciente);
                 Paciente paciente;
                 if (pacienteEntry != null) {
                     Map<String, Object> pacienteMap = (Map<String, Object>) pacienteEntry.getValue();
                     paciente = new Paciente(userName, pacienteMap.get("cpf").toString(),
                             userTelefone, userEmail, userEndereco);
-                    if (View.generateConfirmationDialog("Deseja alterar o cadastro?")) {
+                    if (ViewUtils.generateConfirmationDialog("Deseja alterar o cadastro?")) {
                         this.persistPaciente(paciente, pacienteEntry.getKey(), Actions.Update);
-                        View.generateAlert("Cadastro atualizado com sucesso!");
+                        ViewUtils.generateAlert("Cadastro atualizado com sucesso!");
                         this.setVisibleText(paciente);
                     }
                 } else {
                     paciente = new Paciente(userName, userCpf, userTelefone, userEmail,
                             userEndereco);
                     this.persistPaciente(paciente, null, Actions.Create);
-                    View.generateAlert("Cadastro realizado com sucesso!");
+                    ViewUtils.generateAlert("Cadastro realizado com sucesso!");
                 }
             } else {
-                View.generateAlert("Verifique os dados inseridos e tente novamente");
+                ViewUtils.generateAlert("Verifique os dados inseridos e tente novamente");
             }
         } catch (Exception e) {
-            View.generateAlert(e.getMessage());
+            ViewUtils.generateAlert(e.getMessage());
         }
     }
 
     public void deleletePaciente() {
         try {
             if (Validations.isCpf(CPF.getText())) {
-                if(View.generateConfirmationDialog("Deseja excluir o cadastro?")) {
+                if(ViewUtils.generateConfirmationDialog("Deseja excluir o cadastro?")) {
                     String userCpf = CPF.getText();
-                    Map.Entry<String, Object> value = Json.findEntryByCpf(userCpf, JsonType.Paciente);
+                    Map.Entry<String, Object> value = JsonUtils.findEntryByCpf(userCpf, JsonType.Paciente);
                     if (value != null) {
                         this.persistPaciente(null, value.getKey(), Actions.Delete);
-                        View.generateAlert("Cadastro excluído");
+                        ViewUtils.generateAlert("Cadastro excluído");
                         this.resetText();
                     } else {
                         throw new Exception("Paciente não cadastrado");
@@ -87,7 +87,7 @@ public class PacienteController {
                 }
             }
         } catch (Exception e) {
-            View.generateAlert("Erro ao exluir cadastro!");
+            ViewUtils.generateAlert("Erro ao exluir cadastro!");
         }
     }
 
@@ -95,13 +95,13 @@ public class PacienteController {
             throws URISyntaxException, IOException {
         switch (action) {
             case Create:
-                Json.writeValue(paciente);
+                JsonUtils.writeValue(paciente);
                 break;
             case Update:
-                Json.updateValue(paciente, key);
+                JsonUtils.updateValue(paciente, key);
                 break;
             case Delete:
-                Json.deleteValue(key, JsonType.Paciente);
+                JsonUtils.deleteValue(key, JsonType.Paciente);
                 break;
         }
     }

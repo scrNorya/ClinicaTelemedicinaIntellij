@@ -1,15 +1,16 @@
 package org.example.utils;
 import java.io.*;
 import java.net.URISyntaxException;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.model.Medico;
-import org.example.model.Paciente;
-import org.example.model.Pessoa;
-import org.example.model.Recepcionista;
-public class Json {
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.example.model.*;
+
+
+public class JsonUtils {
 
     private static ObjectMapper objectMapper = getDefaultObjectMapper();
 
@@ -20,6 +21,7 @@ public class Json {
      */
     private static ObjectMapper getDefaultObjectMapper() {
         ObjectMapper defaultObjectMapper = new ObjectMapper();
+        defaultObjectMapper.registerModule(new JavaTimeModule());
         return defaultObjectMapper;
     }
 
@@ -187,5 +189,19 @@ public class Json {
             }
         }
         return entry;
+    }
+
+    public static void saveConsulta(String idConsulta, Consulta consulta) throws URISyntaxException, IOException {
+        Map<String, Object> consultasJson = JsonUtils.readValues(JsonType.Consulta);
+        Map<String, Object> values = new HashMap<>();
+        values.put("cid",consulta.getCid());
+        values.put("data",consulta.getData());
+        values.put("diagnostico",consulta.getDiagnostico());
+        values.put("sala",consulta.getSala());
+        values.put("medicoConsulta",consulta.getMedicoConsulta());
+        values.put("pacienteConsulta",consulta.getPacienteConsulta());
+        values.put("horario",consulta.getHorario());
+        consultasJson.replace(idConsulta,values);
+        objectMapper.writeValue(new File(JsonType.Consulta.getPath()), consultasJson);
     }
 }

@@ -3,7 +3,7 @@ package org.example.utils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
-public class View {
+public class ViewUtils {
 
     public static void generateAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
