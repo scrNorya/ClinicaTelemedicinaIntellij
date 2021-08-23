@@ -27,7 +27,7 @@
              <TableView fx:id="calendar" layoutX="73.0" layoutY="48.0" onMouseClicked="#clickItem" prefHeight="305.0" prefWidth="454.0" GridPane.columnSpan="4" GridPane.rowIndex="1" GridPane.rowSpan="6">
                  <columns>
                      <TableColumn fx:id="hora" maxWidth="75.0" minWidth="66.0" prefWidth="66.0" text="hora" />
-                     <TableColumn fx:id="monday" maxWidth="85.0" minWidth="75.0" prefWidth="85.0" text="Segunda" />
+                     <TableColumn fx:id="MONDAY" maxWidth="85.0" minWidth="75.0" prefWidth="85.0" text="Segunda" />
                      <TableColumn fx:id="TUESDAY" maxWidth="85.0" minWidth="75.0" prefWidth="85.0" text="Terça" />
                      <TableColumn fx:id="WEDNESDAY" maxWidth="85.0" minWidth="75.0" prefWidth="85.0" text="Quarta" />
                      <TableColumn fx:id="THURSDAY" maxWidth="85.0" minWidth="75.0" prefWidth="85.0" text="Quinta" />

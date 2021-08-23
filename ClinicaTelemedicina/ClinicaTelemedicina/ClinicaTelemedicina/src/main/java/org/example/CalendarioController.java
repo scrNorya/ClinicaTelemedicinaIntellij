@@ -64,19 +64,14 @@ public class CalendarioController implements Initializable {
 	public class PacienteConsulta {
 
 		private String hora;
-		private String monday;
-		private String TUESDAY;
-		private String WEDNESDAY;
-		private String THURSDAY;
-		private String FRIDAY;
+		private String MONDAY = "";
+		private String TUESDAY = "";
+		private String WEDNESDAY = "";
+		private String THURSDAY = "";
+		private String FRIDAY = "";
 
 		public PacienteConsulta(String hora) {
 			this.hora = hora;
-		}
-
-		public PacienteConsulta(String hora, String monday) {
-			this.hora = hora;
-			this.monday = monday;
 		}
 
 		public String getHora() {
@@ -88,11 +83,11 @@ public class CalendarioController implements Initializable {
 		}
 
 		public String getMonday() {
-			return monday;
+			return MONDAY;
 		}
 
-		public void setMonday(String monday) {
-			this.monday = monday;
+		public void setMONDAY(String MONDAY) {
+			this.MONDAY = MONDAY;
 		}
 
 		public String getTUESDAY() {
@@ -133,7 +128,7 @@ public class CalendarioController implements Initializable {
 	TableView.TableViewSelectionModel<PacienteConsulta> defaultSelectionModel = calendar.getSelectionModel();
 
 	@FXML private TableColumn<PacienteConsulta, String> hora;
-	@FXML private TableColumn<PacienteConsulta, String> monday;
+	@FXML private TableColumn<PacienteConsulta, String> MONDAY;
 	@FXML private TableColumn<PacienteConsulta, String> TUESDAY;
 	@FXML private TableColumn<PacienteConsulta, String> WEDNESDAY;
 	@FXML private TableColumn<PacienteConsulta, String> THURSDAY;
@@ -142,7 +137,7 @@ public class CalendarioController implements Initializable {
 	@FXML private ComboBox<String> medicoComboBox;
 
 	ObservableList<PacienteConsulta> list = FXCollections.observableArrayList(
-			new PacienteConsulta("08", "teste"),
+			new PacienteConsulta("08"),
 			new PacienteConsulta("09"),
 			new PacienteConsulta("10"),
 			new PacienteConsulta("11"),
@@ -154,14 +149,17 @@ public class CalendarioController implements Initializable {
 			new PacienteConsulta("17")
 	);
 
-	public void init(){
+	public void init() throws URISyntaxException, IOException {
 		calendar.setItems(list);
 		defaultSelectionModel = calendar.getSelectionModel();
 		calendar.setSelectionModel(null);
 		medicoComboBox.setItems(medicosList);
 		hora.setCellValueFactory(new PropertyValueFactory<PacienteConsulta, String>("hora"));
-
-		setColumns();
+		MONDAY.setCellValueFactory(new PropertyValueFactory<PacienteConsulta, String>("MONDAY"));
+		TUESDAY.setCellValueFactory(new PropertyValueFactory<PacienteConsulta, String>("TUESDAY"));
+		WEDNESDAY.setCellValueFactory(new PropertyValueFactory<PacienteConsulta, String>("WEDNESDAY"));
+		THURSDAY.setCellValueFactory(new PropertyValueFactory<PacienteConsulta, String>("THURSDAY"));
+		FRIDAY.setCellValueFactory(new PropertyValueFactory<PacienteConsulta, String>("FRIDAY"));
 
 		calendar.getColumns().addListener(new ListChangeListener() {
 			@Override
@@ -169,22 +167,39 @@ public class CalendarioController implements Initializable {
 				change.next();
 				if (change.wasReplaced()) {
 					calendar.getColumns().clear();
-					calendar.getColumns().addAll(hora, monday, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY);
+					calendar.getColumns().addAll(hora, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY);
 				}
 			}
 		});
+
+		setColumns();
+		populateCalendario();
 	}
 
 	public void setColumns(){
-//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//		monday.setText("SEGUNDA\n" + day.with(DayOfWeek.MONDAY).format(formatter));
-//		TUESDAY.setText("TERÇA\n" + day.with(DayOfWeek.TUESDAY).format(formatter));
-//		WEDNESDAY.setText("QUARTA\n" + day.with(DayOfWeek.WEDNESDAY).format(formatter));
-//		THURSDAY.setText("QUINTA\n" + day.with(DayOfWeek.THURSDAY).format(formatter));
-//		FRIDAY.setText("SEXTA\n" + day.with(DayOfWeek.FRIDAY).format(formatter));
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		MONDAY.setText("SEGUNDA\n" + day.with(DayOfWeek.MONDAY).format(formatter));
+		TUESDAY.setText("TERÇA\n" + day.with(DayOfWeek.TUESDAY).format(formatter));
+		WEDNESDAY.setText("QUARTA\n" + day.with(DayOfWeek.WEDNESDAY).format(formatter));
+		THURSDAY.setText("QUINTA\n" + day.with(DayOfWeek.THURSDAY).format(formatter));
+		FRIDAY.setText("SEXTA\n" + day.with(DayOfWeek.FRIDAY).format(formatter));
 	}
 
 	public void populateCalendario() throws URISyntaxException, IOException {
+		list.setAll(
+			FXCollections.observableArrayList(
+				new PacienteConsulta("08"),
+				new PacienteConsulta("09"),
+				new PacienteConsulta("10"),
+				new PacienteConsulta("11"),
+				new PacienteConsulta("12"),
+				new PacienteConsulta("13"),
+				new PacienteConsulta("14"),
+				new PacienteConsulta("15"),
+				new PacienteConsulta("16"),
+				new PacienteConsulta("17")
+			)
+		);
 		Map<String, Object> consultas = Json.readValues(JsonType.Consulta);
 		LocalDate data;
 		String hora;
@@ -193,11 +208,11 @@ public class CalendarioController implements Initializable {
 			Map<String, Object> values = (Map<String, Object>) entry.getValue();
 			data = LocalDate.parse(values.get("data").toString());
 			hora = values.get("horario").toString();
-			if(data.isAfter(data.minusDays(7)) && data.isBefore(data.plusDays(7))) {
+			if(data.isAfter(day) || data.isEqual(day) && data.isBefore(day)) {
 				pacienteConsulta = new PacienteConsulta(hora);
 				switch (data.getDayOfWeek()) {
 					case MONDAY:
-						pacienteConsulta.setMonday(values.get("pacienteConsulta").toString());
+						pacienteConsulta.setMONDAY(values.get("pacienteConsulta").toString());
 						break;
 					case TUESDAY:
 						pacienteConsulta.setTUESDAY(values.get("pacienteConsulta").toString());
@@ -248,7 +263,13 @@ public class CalendarioController implements Initializable {
 	ObservableList<String> medicosList = FXCollections.observableArrayList("Teste", "teste 1", "teste 2", "teste3");
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
-		init();
+		try {
+			init();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void onChangeMedico(ActionEvent actionEvent) {
