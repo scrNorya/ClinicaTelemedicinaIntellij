@@ -20,5 +20,14 @@
   "3":
   {
     "senha":"GPHwwhd5","telefone":4877776666,"endereco":"joaoruacasa","cpf":"01275423027","nome":"joao","email":"pedrogandra99@gmail.com"
+  },
+  "4":
+  {
+    "senha":"123123as",
+    "telefone":12312312312,
+    "endereco":"end",
+    "cpf":"12356982973",
+    "nome":"Ayron",
+    "email":"ayronsn@gmail.com"
   }
 }

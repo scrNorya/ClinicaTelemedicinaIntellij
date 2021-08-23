@@ -1,1 +1,33 @@
-{"1":{"senha":"4BB5E9Ys","telefone":1561615156,"endereco":"fsafafsa","cpf":"07787552905","nome":"ADFDFAFA","email":"caionoguerol@gmail.com"},"2":{"senha":"1HFCaZGn","telefone":1561615156,"endereco":"fsafafsa","cpf":"40512578001","nome":"LALALALMFASIFMALS","email":"caionoguerol@gmail.com"},"3":{"senha":"GPHwwhd5","telefone":4877776666,"endereco":"joaoruacasa","cpf":"01275423027","nome":"joao","email":"pedrogandra99@gmail.com"}}
+{
+  "1":
+  {
+    "senha":"4BB5E9Ys",
+    "telefone":1561615156,
+    "endereco":"fsafafsa",
+    "cpf":"07787552905",
+    "nome":"ADFDFAFA",
+    "email":"caionoguerol@gmail.com"
+  },
+  "2":
+  {
+    "senha":"1HFCaZGn",
+    "telefone":1561615156,
+    "endereco":"fsafafsa",
+    "cpf":"40512578001",
+    "nome":"LALALALMFASIFMALS",
+    "email":"caionoguerol@gmail.com"
+  },
+  "3":
+  {
+    "senha":"GPHwwhd5","telefone":4877776666,"endereco":"joaoruacasa","cpf":"01275423027","nome":"joao","email":"pedrogandra99@gmail.com"
+  },
+  "4":
+  {
+    "senha":"123123as",
+    "telefone":12312312312,
+    "endereco":"end",
+    "cpf":"12356982973",
+    "nome":"Ayron",
+    "email":"ayronsn@gmail.com"
+  }
+}

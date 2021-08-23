@@ -78,7 +78,7 @@ public class JsonUtils {
     }
 
     public static void updateValue(Paciente paciente, String key) throws URISyntaxException, IOException {
-        Map<String, Object> json = readValues(JsonType.Recepcionista);
+        Map<String, Object> json = readValues(JsonType.Paciente);
         Map<String, Object> values = new HashMap<>();
 
         values.put("cpf", paciente.getCpf());
@@ -88,7 +88,7 @@ public class JsonUtils {
         values.put("telefone", paciente.getTelefone());
 
         json.replace(key, values);
-        objectMapper.writeValue(new File(JsonType.Recepcionista.getPath()), json);
+        objectMapper.writeValue(new File(JsonType.Paciente.getPath()), json);
     }
 
     public static void updateValue(Recepcionista recepcionista, String key) throws URISyntaxException, IOException {

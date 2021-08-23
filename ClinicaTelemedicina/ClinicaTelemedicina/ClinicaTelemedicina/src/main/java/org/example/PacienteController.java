@@ -29,16 +29,14 @@ public class PacienteController {
 
     public void deleletePaciente() {
         try {
-            if (ValidationUtils.isCpf(findCPF.getText())) {
-                if(ViewUtils.generateConfirmationDialog("Deseja excluir o cadastro?")) {
-                    Map.Entry<String, Object> value = JsonUtils.findEntryByCpf(findCPF.getText(), JsonType.Paciente);
-                    if (value != null) {
-                        JsonUtils.deleteValue(value.getKey(), JsonType.Paciente);
-                        ViewUtils.generateAlert("Cadastro excluído");
-                        this.resetText();
-                    } else {
-                        ViewUtils.generateAlert("Paciente não encontrado");
-                    }
+            if(ViewUtils.generateConfirmationDialog("Deseja excluir o cadastro?")) {
+                Map.Entry<String, Object> value = JsonUtils.findEntryByCpf(findCPF.getText(), JsonType.Paciente);
+                if (value != null) {
+                    JsonUtils.deleteValue(value.getKey(), JsonType.Paciente);
+                    ViewUtils.generateAlert("Cadastro excluído");
+                    this.resetText();
+                } else {
+                    ViewUtils.generateAlert("Paciente não encontrado");
                 }
             }
         } catch (Exception e) {
@@ -53,9 +51,9 @@ public class PacienteController {
                         email.getText(), endereco.getText(), null);
                 Map.Entry<String, Object> pacienteEntry = JsonUtils.findEntryByCpf(findCPF.getText(), JsonType.Paciente);
                 if (pacienteEntry != null) {
-                    if (ViewUtils.generateConfirmationDialog("Deseja alterar o cadastro?")) {
+                    if (ViewUtils.generateConfirmationDialog("Deseja autalizar o paciente?")) {
                         JsonUtils.updateValue(paciente, pacienteEntry.getKey());
-                        ViewUtils.generateAlert("Cadastro atualizado com sucesso!");
+                        ViewUtils.generateAlert("Paciente atualizado");
                     }
                 } else {
                     JsonUtils.writeValue(paciente);
