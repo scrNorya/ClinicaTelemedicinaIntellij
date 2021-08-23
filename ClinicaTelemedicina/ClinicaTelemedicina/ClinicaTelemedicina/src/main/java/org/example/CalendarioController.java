@@ -55,48 +55,92 @@ public class CalendarioController implements Initializable {
 		init();
 	}
 
-	public class Hora {
+	public class PacienteConsulta {
 
-		private final String hora;
+		private String hora;
+		private String MONDAY;
+		private String TUESDAY;
+		private String WEDNESDAY;
+		private String THURSDAY;
+		private String FRIDAY;
 
-		public Hora(String hora) {
+		public PacienteConsulta(String hora) {
 			this.hora = hora;
 		}
+
 		public String getHora() {
 			return hora;
 		}
 
+		public void setHora(String hora) {
+			this.hora = hora;
+		}
 
+		public String getMONDAY() {
+			return MONDAY;
+		}
+
+		public void setMONDAY(String MONDAY) {
+			this.MONDAY = MONDAY;
+		}
+
+		public String getTUESDAY() {
+			return TUESDAY;
+		}
+
+		public void setTUESDAY(String TUESDAY) {
+			this.TUESDAY = TUESDAY;
+		}
+
+		public String getWEDNESDAY() {
+			return WEDNESDAY;
+		}
+
+		public void setWEDNESDAY(String WEDNESDAY) {
+			this.WEDNESDAY = WEDNESDAY;
+		}
+
+		public String getTHURSDAY() {
+			return THURSDAY;
+		}
+
+		public void setTHURSDAY(String THURSDAY) {
+			this.THURSDAY = THURSDAY;
+		}
+
+		public String getFRIDAY() {
+			return FRIDAY;
+		}
+
+		public void setFRIDAY(String FRIDAY) {
+			this.FRIDAY = FRIDAY;
+		}
 	}
-	@FXML private TableView<Hora> calendar = new TableView<>();
 
-	TableView.TableViewSelectionModel<Hora> defaultSelectionModel = calendar.getSelectionModel();
+	@FXML private TableView<PacienteConsulta> calendar = new TableView<>();
 
-	@FXML private TableColumn<Hora, String> hora;
+	TableView.TableViewSelectionModel<PacienteConsulta> defaultSelectionModel = calendar.getSelectionModel();
 
-	@FXML private TableColumn<Hora, String> MONDAY;
-
-	@FXML private TableColumn<Hora, String> TUESDAY;
-
-	@FXML private TableColumn<Hora, String> WEDNESDAY;
-
-	@FXML private TableColumn<Hora, String> THURSDAY;
-
-	@FXML private TableColumn<Hora, String> FRIDAY;
+	@FXML private TableColumn<PacienteConsulta, String> hora;
+	@FXML private TableColumn<PacienteConsulta, String> MONDAY;
+	@FXML private TableColumn<PacienteConsulta, String> TUESDAY;
+	@FXML private TableColumn<PacienteConsulta, String> WEDNESDAY;
+	@FXML private TableColumn<PacienteConsulta, String> THURSDAY;
+	@FXML private TableColumn<PacienteConsulta, String> FRIDAY;
 
 	@FXML private ComboBox<String> medicoComboBox;
 
-	ObservableList<Hora> list = FXCollections.observableArrayList(
-			new Hora("08:00"),
-			new Hora("09:00"),
-			new Hora("10:00"),
-			new Hora("11:00"),
-			new Hora("12:00"),
-			new Hora("13:00"),
-			new Hora("14:00"),
-			new Hora("15:00"),
-			new Hora("16:00"),
-			new Hora("17:00")
+	ObservableList<PacienteConsulta> list = FXCollections.observableArrayList(
+			new PacienteConsulta("08:00"),
+			new PacienteConsulta("09:00"),
+			new PacienteConsulta("10:00"),
+			new PacienteConsulta("11:00"),
+			new PacienteConsulta("12:00"),
+			new PacienteConsulta("13:00"),
+			new PacienteConsulta("14:00"),
+			new PacienteConsulta("15:00"),
+			new PacienteConsulta("16:00"),
+			new PacienteConsulta("17:00")
 	);
 
 	public void init(){
@@ -104,7 +148,7 @@ public class CalendarioController implements Initializable {
 		defaultSelectionModel = calendar.getSelectionModel();
 		calendar.setSelectionModel(null);
 		medicoComboBox.setItems(medicosList);
-		hora.setCellValueFactory(new PropertyValueFactory<Hora, String>("hora"));
+		hora.setCellValueFactory(new PropertyValueFactory<PacienteConsulta, String>("hora"));
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 		MONDAY.setText("SEGUNDA\n" +
@@ -118,6 +162,8 @@ public class CalendarioController implements Initializable {
 		FRIDAY.setText("SEXTA\n" +
 				day.with(DayOfWeek.FRIDAY).format(formatter));
 
+
+
 		calendar.getColumns().addListener(new ListChangeListener() {
 			@Override
 			public void onChanged(Change change) {
@@ -129,7 +175,6 @@ public class CalendarioController implements Initializable {
 			}
 		});
 	}
-
 
 	// TODO <<<<<<<<<<<PEGAR DADOS DO JSON PARA A MEDICOSLIST!!!!!!>>>>>>>>>>>>
 
