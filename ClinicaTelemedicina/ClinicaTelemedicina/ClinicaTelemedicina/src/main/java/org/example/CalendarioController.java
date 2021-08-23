@@ -1,5 +1,6 @@
 package org.example;
 
+import java.net.URISyntaxException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -15,10 +16,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import org.example.utils.Json;
+import org.example.utils.JsonType;
 import org.example.utils.View;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class CalendarioController implements Initializable {
@@ -45,20 +49,22 @@ public class CalendarioController implements Initializable {
 		App.setRoot("CadastroPaciente");
 	}
 
-	public void previousWeek(ActionEvent actionEvent) {
+	public void previousWeek(ActionEvent actionEvent) throws URISyntaxException, IOException {
 		day = day.minusDays(7);
 		setColumns();
+		populateCalendario();
 	}
 
-	public void nextWeek(ActionEvent actionEvent) {
+	public void nextWeek(ActionEvent actionEvent) throws URISyntaxException, IOException {
 		day = day.plusDays(7);
 		setColumns();
+		populateCalendario();
 	}
 
 	public class PacienteConsulta {
 
 		private String hora;
-		private String MONDAY;
+		private String monday;
 		private String TUESDAY;
 		private String WEDNESDAY;
 		private String THURSDAY;
@@ -66,6 +72,11 @@ public class CalendarioController implements Initializable {
 
 		public PacienteConsulta(String hora) {
 			this.hora = hora;
+		}
+
+		public PacienteConsulta(String hora, String monday) {
+			this.hora = hora;
+			this.monday = monday;
 		}
 
 		public String getHora() {
@@ -76,12 +87,12 @@ public class CalendarioController implements Initializable {
 			this.hora = hora;
 		}
 
-		public String getMONDAY() {
-			return MONDAY;
+		public String getMonday() {
+			return monday;
 		}
 
-		public void setMONDAY(String MONDAY) {
-			this.MONDAY = MONDAY;
+		public void setMonday(String monday) {
+			this.monday = monday;
 		}
 
 		public String getTUESDAY() {
@@ -122,7 +133,7 @@ public class CalendarioController implements Initializable {
 	TableView.TableViewSelectionModel<PacienteConsulta> defaultSelectionModel = calendar.getSelectionModel();
 
 	@FXML private TableColumn<PacienteConsulta, String> hora;
-	@FXML private TableColumn<PacienteConsulta, String> MONDAY;
+	@FXML private TableColumn<PacienteConsulta, String> monday;
 	@FXML private TableColumn<PacienteConsulta, String> TUESDAY;
 	@FXML private TableColumn<PacienteConsulta, String> WEDNESDAY;
 	@FXML private TableColumn<PacienteConsulta, String> THURSDAY;
@@ -131,16 +142,16 @@ public class CalendarioController implements Initializable {
 	@FXML private ComboBox<String> medicoComboBox;
 
 	ObservableList<PacienteConsulta> list = FXCollections.observableArrayList(
-			new PacienteConsulta("08:00"),
-			new PacienteConsulta("09:00"),
-			new PacienteConsulta("10:00"),
-			new PacienteConsulta("11:00"),
-			new PacienteConsulta("12:00"),
-			new PacienteConsulta("13:00"),
-			new PacienteConsulta("14:00"),
-			new PacienteConsulta("15:00"),
-			new PacienteConsulta("16:00"),
-			new PacienteConsulta("17:00")
+			new PacienteConsulta("08", "teste"),
+			new PacienteConsulta("09"),
+			new PacienteConsulta("10"),
+			new PacienteConsulta("11"),
+			new PacienteConsulta("12"),
+			new PacienteConsulta("13"),
+			new PacienteConsulta("14"),
+			new PacienteConsulta("15"),
+			new PacienteConsulta("16"),
+			new PacienteConsulta("17")
 	);
 
 	public void init(){
@@ -158,25 +169,78 @@ public class CalendarioController implements Initializable {
 				change.next();
 				if (change.wasReplaced()) {
 					calendar.getColumns().clear();
-					calendar.getColumns().addAll(hora, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY);
+					calendar.getColumns().addAll(hora, monday, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY);
 				}
 			}
 		});
 	}
 
 	public void setColumns(){
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//		monday.setText("SEGUNDA\n" + day.with(DayOfWeek.MONDAY).format(formatter));
+//		TUESDAY.setText("TERÇA\n" + day.with(DayOfWeek.TUESDAY).format(formatter));
+//		WEDNESDAY.setText("QUARTA\n" + day.with(DayOfWeek.WEDNESDAY).format(formatter));
+//		THURSDAY.setText("QUINTA\n" + day.with(DayOfWeek.THURSDAY).format(formatter));
+//		FRIDAY.setText("SEXTA\n" + day.with(DayOfWeek.FRIDAY).format(formatter));
+	}
 
-		MONDAY.setText("SEGUNDA\n" +
-				day.with(DayOfWeek.MONDAY).format(formatter));
-		TUESDAY.setText("TERÇA\n" +
-				day.with(DayOfWeek.TUESDAY).format(formatter));
-		WEDNESDAY.setText("QUARTA\n" +
-				day.with(DayOfWeek.WEDNESDAY).format(formatter));
-		THURSDAY.setText("QUINTA\n" +
-				day.with(DayOfWeek.THURSDAY).format(formatter));
-		FRIDAY.setText("SEXTA\n" +
-				day.with(DayOfWeek.FRIDAY).format(formatter));
+	public void populateCalendario() throws URISyntaxException, IOException {
+		Map<String, Object> consultas = Json.readValues(JsonType.Consulta);
+		LocalDate data;
+		String hora;
+		PacienteConsulta pacienteConsulta;
+		for (Map.Entry<String, Object> entry : consultas.entrySet()) {
+			Map<String, Object> values = (Map<String, Object>) entry.getValue();
+			data = LocalDate.parse(values.get("data").toString());
+			hora = values.get("horario").toString();
+			if(data.isAfter(data.minusDays(7)) && data.isBefore(data.plusDays(7))) {
+				pacienteConsulta = new PacienteConsulta(hora);
+				switch (data.getDayOfWeek()) {
+					case MONDAY:
+						pacienteConsulta.setMonday(values.get("pacienteConsulta").toString());
+						break;
+					case TUESDAY:
+						pacienteConsulta.setTUESDAY(values.get("pacienteConsulta").toString());
+						break;
+					case WEDNESDAY:
+						pacienteConsulta.setWEDNESDAY(values.get("pacienteConsulta").toString());
+						break;
+					case THURSDAY:
+						pacienteConsulta.setTHURSDAY(values.get("pacienteConsulta").toString());
+						break;
+					case FRIDAY:
+						pacienteConsulta.setFRIDAY(values.get("pacienteConsulta").toString());
+						break;
+				}
+				list.set(getPacienteConsultaListIndex(hora), pacienteConsulta);
+			}
+		}
+	}
+
+	public int getPacienteConsultaListIndex(String hora) {
+		switch (hora) {
+			case "08":
+				return 0;
+			case "09":
+				return 1;
+			case "10":
+				return 2;
+			case "11":
+				return 3;
+			case "12":
+				return 4;
+			case "13":
+				return 5;
+			case "14":
+				return 6;
+			case "15":
+				return 7;
+			case "16":
+				return 8;
+			case "17":
+				return 9;
+		}
+		return -1;
 	}
 
 	// TODO <<<<<<<<<<<PEGAR DADOS DO JSON PARA A MEDICOSLIST!!!!!!>>>>>>>>>>>>
@@ -200,6 +264,7 @@ public class CalendarioController implements Initializable {
 		if (medicoComboBox.getValue()!=null) {
 			if (!id.equals("hora")) {
 				System.out.println(calendar.getSelectionModel().getSelectedItem().getHora());
+				System.out.println(calendar.getSelectionModel().getSelectedItem().getMonday());
 				System.out.println((calendar.getFocusModel().getFocusedCell().getTableColumn().getId()));
 			}
 		} else {

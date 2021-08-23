@@ -8,7 +8,8 @@ import java.net.URISyntaxException;
 public enum JsonType {
     Medico,
     Recepcionista,
-    Paciente;
+    Paciente,
+    Consulta;
 
     public String getPath() throws URISyntaxException {
         if(Verifications.isRunningFromJar()) {

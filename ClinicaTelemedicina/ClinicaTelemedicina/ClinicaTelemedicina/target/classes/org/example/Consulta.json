@@ -1,8 +1,14 @@
 {
-  "cid": "cid",
-  "date": "datetype",
-  "diagnostico": "diagnostico",
-  "sala": "sala",
-  "medicoConsulta": "medico",
-  "pacienteConsulta": "paciente"
+  "1":
+    {
+      "pacienteConsulta":"84035620041","horario":"11","data":"2021-08-22"
+    },
+  "2":
+  {
+    "pacienteConsulta":"84035620041","horario":"15","data":"2021-08-24"
+  },
+  "3":
+  {
+    "pacienteConsulta":"84035620041","horario":"12","data":"2021-08-28"
+  }
 }
