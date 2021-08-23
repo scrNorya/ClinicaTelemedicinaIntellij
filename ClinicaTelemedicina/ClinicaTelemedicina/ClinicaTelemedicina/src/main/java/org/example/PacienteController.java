@@ -1,6 +1,5 @@
 package org.example;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Map;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -16,52 +15,12 @@ public class PacienteController {
     @FXML private TextField findCPF;
 
     public void findByCPF() {
-        String cpf = this.findCPF.getText();
         try {
-            Paciente paciente = (Paciente) JsonUtils.findByCPF(cpf, JsonType.Paciente);
-            this.setVisibleText(paciente);
-        } catch (Exception e) {
-            ViewUtils.generateAlert(e.getMessage());
-        }
-    }
-
-    public void savePaciente() {
-        String userCpf = "";
-        String userEmail = "";
-        String userName = "";
-        String userEndereco = "";
-        long userTelefone = 0;
-
-        try {
-            if (ValidationUtils.isValidName(name.getText()) && ValidationUtils.isCpf(findCPF.getText()) &&
-                    ValidationUtils.isValidEmail(email.getText()) && ValidationUtils.isEnderecoValid(endereco.getText())
-                    && ValidationUtils.isTelefoneValid(telefone.getText())
-            ) {
-                userName = name.getText();
-                userCpf = findCPF.getText();
-                userEmail = email.getText();
-                userEndereco = endereco.getText();
-                userTelefone = Long.parseLong(telefone.getText());
-
-                Map.Entry<String, Object> pacienteEntry = JsonUtils.findEntryByCpf(userCpf, JsonType.Paciente);
-                Paciente paciente;
-                if (pacienteEntry != null) {
-                    Map<String, Object> pacienteMap = (Map<String, Object>) pacienteEntry.getValue();
-                    paciente = new Paciente(userName, pacienteMap.get("cpf").toString(),
-                            userTelefone, userEmail, userEndereco, null);
-                    if (ViewUtils.generateConfirmationDialog("Deseja alterar o cadastro?")) {
-                        this.persistPaciente(paciente, pacienteEntry.getKey(), Actions.Update);
-                        ViewUtils.generateAlert("Cadastro atualizado");
-                        this.setVisibleText(paciente);
-                    }
-                } else {
-                    paciente = new Paciente(userName, userCpf, userTelefone, userEmail,
-                            userEndereco, null);
-                    this.persistPaciente(paciente, null, Actions.Create);
-                    ViewUtils.generateAlert("Cadastro realizado");
-                }
+            Paciente paciente = (Paciente) JsonUtils.findByCPF(findCPF.getText(), JsonType.Paciente);
+            if (paciente != null) {
+                this.setVisibleText(paciente);
             } else {
-                ViewUtils.generateAlert("Verifique os dados inseridos e tente novamente");
+                ViewUtils.generateAlert("Paciente não encontrado");
             }
         } catch (Exception e) {
             ViewUtils.generateAlert(e.getMessage());
@@ -72,10 +31,9 @@ public class PacienteController {
         try {
             if (ValidationUtils.isCpf(findCPF.getText())) {
                 if(ViewUtils.generateConfirmationDialog("Deseja excluir o cadastro?")) {
-                    String userCpf = findCPF.getText();
-                    Map.Entry<String, Object> value = JsonUtils.findEntryByCpf(userCpf, JsonType.Paciente);
+                    Map.Entry<String, Object> value = JsonUtils.findEntryByCpf(findCPF.getText(), JsonType.Paciente);
                     if (value != null) {
-                        this.persistPaciente(null, value.getKey(), Actions.Delete);
+                        JsonUtils.deleteValue(value.getKey(), JsonType.Paciente);
                         ViewUtils.generateAlert("Cadastro excluído");
                         this.resetText();
                     } else {
@@ -84,22 +42,28 @@ public class PacienteController {
                 }
             }
         } catch (Exception e) {
-            ViewUtils.generateAlert("Erro ao exluir cadastro!");
+            ViewUtils.generateAlert(e.getMessage());
         }
     }
 
-    private void persistPaciente(Paciente paciente, String key, Actions action)
-            throws URISyntaxException, IOException {
-        switch (action) {
-            case Create:
-                JsonUtils.writeValue(paciente);
-                break;
-            case Update:
-                JsonUtils.updateValue(paciente, key);
-                break;
-            case Delete:
-                JsonUtils.deleteValue(key, JsonType.Paciente);
-                break;
+    public void savePaciente() {
+        try {
+            if (areFieldsValid()) {
+                Paciente paciente = new Paciente(name.getText(), findCPF.getText(), Long.parseLong(telefone.getText()),
+                        email.getText(), endereco.getText(), null);
+                Map.Entry<String, Object> pacienteEntry = JsonUtils.findEntryByCpf(findCPF.getText(), JsonType.Paciente);
+                if (pacienteEntry != null) {
+                    if (ViewUtils.generateConfirmationDialog("Deseja alterar o cadastro?")) {
+                        JsonUtils.updateValue(paciente, pacienteEntry.getKey());
+                        ViewUtils.generateAlert("Cadastro atualizado com sucesso!");
+                    }
+                } else {
+                    JsonUtils.writeValue(paciente);
+                    ViewUtils.generateAlert("Cadastro realizado com sucesso!");
+                }
+            }
+        } catch (Exception e) {
+            ViewUtils.generateAlert(e.getMessage());
         }
     }
 
@@ -121,5 +85,11 @@ public class PacienteController {
 
     public void goBack() throws IOException {
         App.setRoot("Calendario");
+    }
+
+    public boolean areFieldsValid() throws Exception {
+        return ValidationUtils.isValidName(name.getText()) && ValidationUtils.isCpf(findCPF.getText()) &&
+                ValidationUtils.isValidEmail(email.getText()) && ValidationUtils.isEnderecoValid(endereco.getText())
+                && ValidationUtils.isTelefoneValid(telefone.getText());
     }
 }

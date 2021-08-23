@@ -170,23 +170,26 @@ public class JsonUtils {
                 }
             }
         }
-        throw new Exception("CPF não encontrado");
+        return null;
     }
 
-    public static Map.Entry<String, Object> findEntryByCpf(String cpf, JsonType jsonType) throws URISyntaxException, IOException {
-        Map<String, Object> json = readValues(jsonType);
-        Map.Entry<String, Object> entry = null;
-        Map<String, Object> values;
+    public static Map.Entry<String, Object> findEntryByCpf(String cpf, JsonType jsonType) throws Exception {
+        if(ValidationUtils.isCpf(cpf)) {
+            Map<String, Object> json = readValues(jsonType);
+            Map.Entry<String, Object> entry = null;
+            Map<String, Object> values;
 
-        if(json!=null) {
-            for (Map.Entry<String, Object> e : json.entrySet()) {
-                values = (Map<String, Object>) e.getValue();
-                if (cpf.equals(values.get("cpf"))) {
-                    entry = e;
+            if(json!=null) {
+                for (Map.Entry<String, Object> e : json.entrySet()) {
+                    values = (Map<String, Object>) e.getValue();
+                    if (cpf.equals(values.get("cpf"))) {
+                        entry = e;
 
+                    }
                 }
             }
+            return entry;
         }
-        return entry;
+        return null;
     }
 }
