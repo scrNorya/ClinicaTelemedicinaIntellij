@@ -46,6 +46,10 @@ public class CalendarioController implements Initializable {
 		App.setRoot("CadastroPaciente");
 	}
 
+	public  void createConsulta() throws IOException{
+		App.setRoot("AgendarConsulta");
+	}
+
 	public void previousWeek(ActionEvent actionEvent) {
 		day = day.minusDays(7);
 		setColumns();

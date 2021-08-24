@@ -79,6 +79,22 @@ public class JsonUtils {
         objectMapper.writeValue(new File(JsonType.Medico.getPath()), json);
     }
 
+    public static void writeValue(Consulta consulta) throws URISyntaxException, IOException {
+        Map<String, Object> json = readValues(JsonType.Consulta);
+        Map<String, Object> values = new HashMap<>();
+
+        values.put("cid",consulta.getCid());
+        values.put("data",consulta.getData());
+        values.put("diagnostico",consulta.getDiagnostico());
+        values.put("sala",consulta.getSala());
+        values.put("medicoConsulta",consulta.getMedicoConsulta());
+        values.put("pacienteConsulta",consulta.getPacienteConsulta());
+        values.put("horario",consulta.getHorario());
+
+        json.put(String.valueOf(UUID.randomUUID().toString()), values);
+        objectMapper.writeValue(new File(JsonType.Consulta.getPath()), json);
+    }
+
     public static void updateValue(Paciente paciente, String key) throws URISyntaxException, IOException {
         Map<String, Object> json = readValues(JsonType.Recepcionista);
         Map<String, Object> values = new HashMap<>();

@@ -9,13 +9,13 @@ public class Consulta {
 
 
 	private String cid;
-
 	private String diagnostico;
 	private String sala;
 	private String medicoConsulta;
 	private String pacienteConsulta;
 	private String horario;
 	private String data;
+
 
 //	private Receita receita;
 
