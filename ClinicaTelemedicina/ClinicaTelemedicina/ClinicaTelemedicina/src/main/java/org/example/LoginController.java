@@ -7,7 +7,7 @@ import org.example.model.Medico;
 import org.example.model.Recepcionista;
 import org.example.utils.JsonUtils;
 import org.example.utils.JsonType;
-import org.example.utils.Validations;
+import org.example.utils.ValidationUtils;
 import org.example.utils.ViewUtils;;
 
 
@@ -24,7 +24,7 @@ public class LoginController {
 	public void login() {
 
 		try {
-			if(Validations.isCpf(username.getText()) && Validations.isValidPassword(password.getText())) {
+			if(ValidationUtils.isCpf(username.getText()) && ValidationUtils.isValidPassword(password.getText())) {
 				recepcionista = (Recepcionista) JsonUtils.findByCPF(username.getText(), JsonType.Recepcionista);
 				if(recepcionista != null  && recepcionista.getSenha().equals(password.getText())) {
 					switchToRecepcionista();

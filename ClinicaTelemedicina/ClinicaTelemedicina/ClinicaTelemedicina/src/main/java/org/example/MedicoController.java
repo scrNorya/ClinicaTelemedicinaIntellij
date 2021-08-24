@@ -40,9 +40,9 @@ public class MedicoController {
         long userTelefone = 0;
 
         try {
-            if (Validations.isValidName(name.getText()) && Validations.isCpf(CPF.getText()) &&
-                    Validations.isCRMValid(CRM.getText()) && Validations.isValidEmail(email.getText()) &&
-                    Validations.isEnderecoValid(endereco.getText()) && Validations.isTelefoneValid(telefone.getText())
+            if (ValidationUtils.isValidName(name.getText()) && ValidationUtils.isCpf(CPF.getText()) &&
+                    ValidationUtils.isCRMValid(CRM.getText()) && ValidationUtils.isValidEmail(email.getText()) &&
+                    ValidationUtils.isEnderecoValid(endereco.getText()) && ValidationUtils.isTelefoneValid(telefone.getText())
             ) {
                 userName = name.getText();
                 userCpf = CPF.getText();
@@ -63,7 +63,7 @@ public class MedicoController {
                         this.setVisibleText(medico);
                     }
                 } else {
-                    String userSenha = Security.generatePassword();
+                    String userSenha = SecurityUtils.generatePassword();
                     medico = new Medico(userName, userCpf, userCRM, userTelefone, userEmail,
                             userEndereco, userSenha);
                     this.persistMedico(medico, null, Actions.Create);
@@ -80,7 +80,7 @@ public class MedicoController {
 
     public void deleteMedico() {
         try {
-            if (Validations.isCpf(CPF.getText())) {
+            if (ValidationUtils.isCpf(CPF.getText())) {
                 if(ViewUtils.generateConfirmationDialog("Deseja excluir o cadastro?")) {
                     String userCpf = CPF.getText();
                     Map.Entry<String, Object> value = JsonUtils.findEntryByCpf(userCpf, JsonType.Medico);

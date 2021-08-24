@@ -8,8 +8,10 @@ import java.util.UUID;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.model.*;
-
-
+import org.example.model.Medico;
+import org.example.model.Paciente;
+import org.example.model.Pessoa;
+import org.example.model.Recepcionista;
 public class JsonUtils {
 
     private static ObjectMapper objectMapper = getDefaultObjectMapper();
@@ -96,7 +98,7 @@ public class JsonUtils {
     }
 
     public static void updateValue(Paciente paciente, String key) throws URISyntaxException, IOException {
-        Map<String, Object> json = readValues(JsonType.Recepcionista);
+        Map<String, Object> json = readValues(JsonType.Paciente);
         Map<String, Object> values = new HashMap<>();
 
         values.put("cpf", paciente.getCpf());
@@ -106,7 +108,7 @@ public class JsonUtils {
         values.put("telefone", paciente.getTelefone());
 
         json.replace(key, values);
-        objectMapper.writeValue(new File(JsonType.Recepcionista.getPath()), json);
+        objectMapper.writeValue(new File(JsonType.Paciente.getPath()), json);
     }
 
     public static void updateValue(Recepcionista recepcionista, String key) throws URISyntaxException, IOException {
@@ -149,7 +151,7 @@ public class JsonUtils {
     public static Pessoa findByCPF(String cpf, JsonType jsonType) throws Exception {
         Pessoa pessoa;
 
-        if (Validations.isCpf(cpf)) {
+        if (ValidationUtils.isCpf(cpf)) {
             Map<String, Object> json = readValues(jsonType);
 
             if (jsonType == JsonType.Recepcionista) {
@@ -181,7 +183,8 @@ public class JsonUtils {
                     if (cpf.equals(values.get("cpf"))) {
                         long telefoneValue = Long.parseLong(values.get("telefone").toString());
                         pessoa = new Paciente(values.get("nome").toString(), cpf, telefoneValue,
-                                values.get("email").toString(), values.get("endereco").toString());
+                                values.get("email").toString(), values.get("endereco").toString(), null);
+                        //TODO pessoa consultas
                         return pessoa;
                     }
                 }
@@ -190,21 +193,24 @@ public class JsonUtils {
         return null;
     }
 
-    public static Map.Entry<String, Object> findEntryByCpf(String cpf, JsonType jsonType) throws URISyntaxException, IOException {
-        Map<String, Object> json = readValues(jsonType);
-        Map.Entry<String, Object> entry = null;
-        Map<String, Object> values;
+    public static Map.Entry<String, Object> findEntryByCpf(String cpf, JsonType jsonType) throws Exception {
+        if(ValidationUtils.isCpf(cpf)) {
+            Map<String, Object> json = readValues(jsonType);
+            Map.Entry<String, Object> entry = null;
+            Map<String, Object> values;
 
-        if(json!=null) {
-            for (Map.Entry<String, Object> e : json.entrySet()) {
-                values = (Map<String, Object>) e.getValue();
-                if (cpf.equals(values.get("cpf"))) {
-                    entry = e;
+            if(json!=null) {
+                for (Map.Entry<String, Object> e : json.entrySet()) {
+                    values = (Map<String, Object>) e.getValue();
+                    if (cpf.equals(values.get("cpf"))) {
+                        entry = e;
 
+                    }
                 }
             }
+            return entry;
         }
-        return entry;
+        return null;
     }
 
     public static void saveConsulta(String idConsulta, Consulta consulta) throws URISyntaxException, IOException {

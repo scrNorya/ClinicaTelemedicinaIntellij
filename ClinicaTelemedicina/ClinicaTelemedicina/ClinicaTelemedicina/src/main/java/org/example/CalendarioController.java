@@ -290,7 +290,7 @@ public class CalendarioController implements Initializable {
 
 	private ObservableList<MedicoCombo> getMedicosList() throws URISyntaxException, IOException {
 		ObservableList<MedicoCombo> medicosList = FXCollections.observableArrayList();
-		Map<String, Object> medicosJsonData = Json.readValues(JsonType.Medico);
+		Map<String, Object> medicosJsonData = JsonUtils.readValues(JsonType.Medico);
 		for(Map.Entry value: medicosJsonData.entrySet()){
 			Map<String, Object> medicoObjeto = (Map<String, Object>) value.getValue();
 			medicosList.add(new MedicoCombo(medicoObjeto.get("cpf").toString(), medicoObjeto.get("nome").toString()));

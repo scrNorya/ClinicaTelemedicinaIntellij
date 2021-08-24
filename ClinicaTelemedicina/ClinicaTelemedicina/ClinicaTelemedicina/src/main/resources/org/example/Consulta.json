@@ -1,10 +1,6 @@
 {
   "1":{
-<<<<<<< HEAD
-    "data":"2021-08-26",
-=======
     "data":"2021-08-24",
->>>>>>> calendario
     "horario":"11",
     "diagnostico":"sfsrgdgfdggfdsgfsd",
     "sala":"B7bEQpRgWN",
@@ -14,37 +10,11 @@
   },
   "2":{
     "data":"2021-08-25",
-<<<<<<< HEAD
-    "horario":"19",
-=======
     "horario":"14",
->>>>>>> calendario
     "diagnostico":"sfsrgdgfdggfdsgfsd",
     "sala":"B7bEQpRgWN",
     "medicoConsulta":"11832332993",
     "pacienteConsulta":"84035620041",
     "cid":"11111"
-<<<<<<< HEAD
-  },
-  "3":{
-    "data":"2021-08-23",
-    "horario":"19",
-    "diagnostico":"sfsrgdgfdggfdsgfsd",
-    "sala":"B7bEQpRgWN",
-    "medicoConsulta":"06630684010",
-    "pacienteConsulta":"84035620041",
-    "cid":"11111"
-  },
-  "4":{
-    "data":"2021-08-23",
-    "horario":"19",
-    "diagnostico":"sfsrgdgfdggfdsgfsd",
-    "sala":"B7bEQpRgWN",
-    "medicoConsulta":"11832332993",
-    "pacienteConsulta":"70942084055",
-    "cid":"11111"
-  },
-=======
   }
->>>>>>> calendario
 }
