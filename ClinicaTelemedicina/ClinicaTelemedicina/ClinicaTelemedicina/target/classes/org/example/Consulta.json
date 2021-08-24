@@ -1,1 +1,24 @@
+<<<<<<< HEAD
 {"1":{"data":"2021-08-26","horario":"11","diagnostico":"sfsrgdgfdggfdsgfsd","sala":"B7bEQpRgWN","medicoConsulta":"06630684010","pacienteConsulta":"84035620041","cid":"11111"},"2":{"data":"2021-08-25","horario":"19","diagnostico":"sfsrgdgfdggfdsgfsd","sala":"B7bEQpRgWN","medicoConsulta":"11832332993","pacienteConsulta":"84035620041","cid":"11111"},"3":{"data":"2021-08-23","horario":"19","diagnostico":"sfsrgdgfdggfdsgfsd","sala":"B7bEQpRgWN","medicoConsulta":"06630684010","pacienteConsulta":"84035620041","cid":"11111"},"4":{"data":"2021-08-23","horario":"19","diagnostico":"sfsrgdgfdggfdsgfsd","sala":"B7bEQpRgWN","medicoConsulta":"11832332993","pacienteConsulta":"70942084055","cid":"11111"},"5":{"data":"2021-08-23","horario":"19","diagnostico":"JSON CERTO PORRA!","sala":"B7bEQpRgWN","medicoConsulta":"11832332993","pacienteConsulta":"84035620041","cid":"11111"},"92accec5-dde6-464a-95a1-9be75074e47d":{"data":"2022-01-01","horario":"10","diagnostico":"","sala":"","medicoConsulta":"11832332993","pacienteConsulta":"11832332993","cid":""},"5e00d6cd-9db8-4638-aee7-5a6acbaa90fb":{"data":"2021-09-09","horario":"09","diagnostico":"","sala":"","medicoConsulta":"11832332993","pacienteConsulta":"73925225900","cid":""}}
+=======
+{
+  "1":{
+    "data":"2021-08-24",
+    "horario":"11",
+    "diagnostico":"sfsrgdgfdggfdsgfsd",
+    "sala":"B7bEQpRgWN",
+    "medicoConsulta":"06630684010",
+    "pacienteConsulta":"84035620041",
+    "cid":"11111"
+  },
+  "2":{
+    "data":"2021-08-25",
+    "horario":"14",
+    "diagnostico":"sfsrgdgfdggfdsgfsd",
+    "sala":"B7bEQpRgWN",
+    "medicoConsulta":"11832332993",
+    "pacienteConsulta":"84035620041",
+    "cid":"11111"
+  }
+}
+>>>>>>> calendario

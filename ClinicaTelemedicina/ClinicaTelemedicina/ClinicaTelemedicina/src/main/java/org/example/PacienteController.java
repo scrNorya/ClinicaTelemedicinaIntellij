@@ -16,55 +16,13 @@ public class PacienteController {
     @FXML private TextField telefone;
     @FXML private TextField findCPF;
 
-    public Paciente findByCPF() throws Exception {
-        String cpf = this.findCPF.getText();
-        Paciente paciente = (Paciente) JsonUtils.findByCPF(cpf, JsonType.Paciente);
-        if (paciente != null) {
-            this.setVisibleText(paciente);
-            return paciente;
-        } else {
-            ViewUtils.generateAlert("Cpf não encontrado!");
-        }
-        return null;
-    }
-
-    public void savePaciente() {
-        String userCpf = "";
-        String userEmail = "";
-        String userName = "";
-        String userEndereco = "";
-        long userTelefone = 0;
-
+    public void findByCPF() {
         try {
-            if (Validations.isValidName(name.getText()) && Validations.isCpf(CPF.getText()) &&
-                    Validations.isValidEmail(email.getText()) && Validations.isEnderecoValid(endereco.getText())
-                    && Validations.isTelefoneValid(telefone.getText())
-            ) {
-                userName = name.getText();
-                userCpf = CPF.getText();
-                userEmail = email.getText();
-                userEndereco = endereco.getText();
-                userTelefone = Long.parseLong(telefone.getText());
-
-                Map.Entry<String, Object> pacienteEntry = JsonUtils.findEntryByCpf(userCpf, JsonType.Paciente);
-                Paciente paciente;
-                if (pacienteEntry != null) {
-                    Map<String, Object> pacienteMap = (Map<String, Object>) pacienteEntry.getValue();
-                    paciente = new Paciente(userName, pacienteMap.get("cpf").toString(),
-                            userTelefone, userEmail, userEndereco);
-                    if (ViewUtils.generateConfirmationDialog("Deseja alterar o cadastro?")) {
-                        this.persistPaciente(paciente, pacienteEntry.getKey(), Actions.Update);
-                        ViewUtils.generateAlert("Cadastro atualizado com sucesso!");
-                        this.setVisibleText(paciente);
-                    }
-                } else {
-                    paciente = new Paciente(userName, userCpf, userTelefone, userEmail,
-                            userEndereco);
-                    this.persistPaciente(paciente, null, Actions.Create);
-                    ViewUtils.generateAlert("Cadastro realizado com sucesso!");
-                }
+            Paciente paciente = (Paciente) Json.findByCPF(findCPF.getText(), JsonType.Paciente);
+            if (paciente != null) {
+                setVisibleText(paciente);
             } else {
-                ViewUtils.generateAlert("Verifique os dados inseridos e tente novamente");
+                ViewUtils.generateAlert("Paciente não encontrado");
             }
         } catch (Exception e) {
             ViewUtils.generateAlert(e.getMessage());
@@ -78,8 +36,13 @@ public class PacienteController {
                     String userCpf = CPF.getText();
                     Map.Entry<String, Object> value = JsonUtils.findEntryByCpf(userCpf, JsonType.Paciente);
                     if (value != null) {
+<<<<<<< HEAD
                         this.persistPaciente(null, value.getKey(), Actions.Delete);
                         ViewUtils.generateAlert("Cadastro excluído");
+=======
+                        Json.deleteValue(value.getKey(), JsonType.Paciente);
+                        View.generateAlert("Cadastro excluído");
+>>>>>>> calendario
                         this.resetText();
                     } else {
                         throw new Exception("Paciente não cadastrado");
@@ -91,6 +54,7 @@ public class PacienteController {
         }
     }
 
+<<<<<<< HEAD
     private void persistPaciente(Paciente paciente, String key, Actions action)
             throws URISyntaxException, IOException {
         switch (action) {
@@ -103,6 +67,26 @@ public class PacienteController {
             case Delete:
                 JsonUtils.deleteValue(key, JsonType.Paciente);
                 break;
+=======
+    public void savePaciente() {
+        try {
+            if (areFieldsValid()) {
+                Paciente paciente = new Paciente(name.getText(), CPF.getText(), Long.parseLong(telefone.getText()),
+                        email.getText(), endereco.getText());
+                Map.Entry<String, Object> pacienteEntry = Json.findEntryByCpf(CPF.getText(), JsonType.Paciente);
+                if (pacienteEntry != null) {
+                    if (View.generateConfirmationDialog("Deseja alterar o cadastro?")) {
+                        Json.updateValue(paciente, pacienteEntry.getKey());
+                        View.generateAlert("Cadastro atualizado com sucesso!");
+                    }
+                } else {
+                    Json.writeValue(paciente);
+                    View.generateAlert("Cadastro realizado com sucesso!");
+                }
+            }
+        } catch (Exception e) {
+            View.generateAlert(e.getMessage());
+>>>>>>> calendario
         }
     }
 
@@ -124,5 +108,11 @@ public class PacienteController {
 
     public void goBack() throws IOException {
         App.setRoot("Calendario");
+    }
+
+    public boolean areFieldsValid() throws Exception {
+        return Validations.isValidName(name.getText()) && Validations.isCpf(CPF.getText()) &&
+                Validations.isValidEmail(email.getText()) && Validations.isEnderecoValid(endereco.getText())
+                && Validations.isTelefoneValid(telefone.getText());
     }
 }
