@@ -52,13 +52,17 @@ public class CalendarioController implements Initializable {
 	public void previousWeek(ActionEvent actionEvent) throws URISyntaxException, IOException {
 		day = day.minusDays(7);
 		setColumns();
-		populateCalendario();
+		if(medicoComboBox.getValue() != null) {
+			populateCalendario();
+		}
 	}
 
 	public void nextWeek(ActionEvent actionEvent) throws URISyntaxException, IOException {
 		day = day.plusDays(7);
 		setColumns();
-		populateCalendario();
+		if(medicoComboBox.getValue() != null) {
+			populateCalendario();
+		}
 	}
 
 	public class PacienteConsulta {
@@ -134,7 +138,7 @@ public class CalendarioController implements Initializable {
 	@FXML private TableColumn<PacienteConsulta, String> THURSDAY;
 	@FXML private TableColumn<PacienteConsulta, String> FRIDAY;
 
-	@FXML private ComboBox<String> medicoComboBox;
+	@FXML private ComboBox<MedicoCombo> medicoComboBox;
 
 	ObservableList<PacienteConsulta> list = FXCollections.observableArrayList(
 			new PacienteConsulta("08"),
@@ -153,7 +157,7 @@ public class CalendarioController implements Initializable {
 		calendar.setItems(list);
 		defaultSelectionModel = calendar.getSelectionModel();
 		calendar.setSelectionModel(null);
-		medicoComboBox.setItems(medicosList);
+		medicoComboBox.setItems(getMedicosList());
 		hora.setCellValueFactory(new PropertyValueFactory<PacienteConsulta, String>("hora"));
 		MONDAY.setCellValueFactory(new PropertyValueFactory<PacienteConsulta, String>("MONDAY"));
 		TUESDAY.setCellValueFactory(new PropertyValueFactory<PacienteConsulta, String>("TUESDAY"));
@@ -173,7 +177,6 @@ public class CalendarioController implements Initializable {
 		});
 
 		setColumns();
-		populateCalendario();
 	}
 
 	public void setColumns(){
@@ -208,7 +211,8 @@ public class CalendarioController implements Initializable {
 			Map<String, Object> values = (Map<String, Object>) entry.getValue();
 			data = LocalDate.parse(values.get("data").toString());
 			hora = values.get("horario").toString();
-			if(data.isAfter(day) || data.isEqual(day) && data.isBefore(day)) {
+			if((data.isAfter(day) || data.isEqual(day)) && data.isBefore(day.plusDays(5)) &&
+					medicoComboBox.getValue().getCpf().equals(values.get("medicoConsulta"))) {
 				pacienteConsulta = new PacienteConsulta(hora);
 				switch (data.getDayOfWeek()) {
 					case MONDAY:
@@ -258,9 +262,39 @@ public class CalendarioController implements Initializable {
 		return -1;
 	}
 
-	// TODO <<<<<<<<<<<PEGAR DADOS DO JSON PARA A MEDICOSLIST!!!!!!>>>>>>>>>>>>
+	class MedicoCombo {
+		private String cpf = "";
+		private String nome = "";
 
-	ObservableList<String> medicosList = FXCollections.observableArrayList("Teste", "teste 1", "teste 2", "teste3");
+		public MedicoCombo(String cpf, String nome) {
+			this.cpf = cpf;
+			this.nome = nome;
+		}
+
+		@Override
+		public String toString() {
+			return this.getNome();
+		}
+
+		public String getNome() {
+			return nome;
+		}
+
+		public String getCpf() {
+			return cpf;
+		}
+	}
+
+	private ObservableList<MedicoCombo> getMedicosList() throws URISyntaxException, IOException {
+		ObservableList<MedicoCombo> medicosList = FXCollections.observableArrayList();
+		Map<String, Object> medicosJsonData = Json.readValues(JsonType.Medico);
+		for(Map.Entry value: medicosJsonData.entrySet()){
+			Map<String, Object> medicoObjeto = (Map<String, Object>) value.getValue();
+			medicosList.add(new MedicoCombo(medicoObjeto.get("cpf").toString(), medicoObjeto.get("nome").toString()));
+		}
+		return medicosList;
+	}
+
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
 		try {
@@ -272,10 +306,11 @@ public class CalendarioController implements Initializable {
 		}
 	}
 
-	public void onChangeMedico(ActionEvent actionEvent) {
+	public void onChangeMedico(ActionEvent actionEvent) throws URISyntaxException, IOException {
 		if(medicoComboBox.getValue() != null) {
 			calendar.setSelectionModel(defaultSelectionModel);
 			calendar.getSelectionModel().setCellSelectionEnabled(true);
+			populateCalendario();
 		}
 	}
 
