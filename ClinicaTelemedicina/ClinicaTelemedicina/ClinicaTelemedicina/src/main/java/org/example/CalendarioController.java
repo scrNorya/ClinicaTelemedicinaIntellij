@@ -13,15 +13,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import org.example.model.Consulta;
+import org.example.model.Paciente;
 import org.example.utils.JsonUtils;
 import org.example.utils.JsonType;
 import org.example.utils.ViewUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -318,17 +322,57 @@ public class CalendarioController implements Initializable {
 	}
 
 	@FXML
-	public void clickItem(MouseEvent event) {
+	public void clickItem(MouseEvent event) throws URISyntaxException, IOException {
 		String id = calendar.getFocusModel().getFocusedCell().getTableColumn().getId();
 		if (medicoComboBox.getValue()!=null) {
 			if (!id.equals("hora")) {
+
+				TablePosition pos = calendar.getSelectionModel().getSelectedCells().get(0);
+				int row = pos.getRow();
+				PacienteConsulta item = calendar.getItems().get(row);
+				TableColumn col = pos.getTableColumn();
+				String cpf = (String) col.getCellObservableValue(item).getValue();
+				this.setConsulta(calendar.getFocusModel().getFocusedCell().getTableColumn().getText(),calendar.getSelectionModel().getSelectedItem().getHora(), cpf);
 				System.out.println(calendar.getSelectionModel().getSelectedItem().getHora());
 				System.out.println(calendar.getSelectionModel().getSelectedItem().getMonday());
-				System.out.println((calendar.getFocusModel().getFocusedCell().getTableColumn().getId()));
+				System.out.println((calendar.getFocusModel().getFocusedCell().getTableColumn().getText()));
 			}
 		} else {
 			calendar.setSelectionModel(null);
 			ViewUtils.generateAlert("Selecione um medico");
 		}
+	}
+
+	private void setConsulta(String data, String hora, String cpfPaciente) throws URISyntaxException, IOException {
+		String dataFormated = this.dataFormatter(data);
+		Map<String, Object> consultas = JsonUtils.readValues(JsonType.Consulta);
+		if(!cpfPaciente.isBlank()){
+			for(Map.Entry<String, Object> entry : consultas.entrySet()){
+				Map<String, Object> values = (Map<String, Object>) entry.getValue();
+				if(medicoComboBox.getValue().getCpf().equals(values.get("medicoConsulta")) && cpfPaciente.equals(values.get("pacienteConsulta"))){
+					if(dataFormated.equals(values.get("data"))&& hora.equals(values.get("horario"))){
+						Consulta consultaSelecionada = new Consulta("",dataFormated, "", values.get("sala").toString(), values.get("medicoConsulta").toString(), values.get("pacienteConsulta").toString(), values.get("horario").toString());
+						ApplicationContext.getInstance().setConsultaSelecionada(consultaSelecionada);
+						ApplicationContext.getInstance().getConsultaSelecionada(); // Para testar
+
+					}
+				}
+			}
+
+		}else{
+			Consulta consutaMarcada = new Consulta("",dataFormated, "", "",medicoComboBox.getValue().getCpf(), "", hora);
+			ApplicationContext.getInstance().setConsultaSelecionada(consutaMarcada);
+			ApplicationContext.getInstance().getConsultaSelecionada();// Para testar
+
+		}
+
+	}
+
+	private String dataFormatter(String data) {
+		String valueData = data.split("\n")[1];
+		String[] dataArray = valueData.split("/");
+		return dataArray[2]+"-"+dataArray[1]+"-"+dataArray[0];
+
+
 	}
 }
