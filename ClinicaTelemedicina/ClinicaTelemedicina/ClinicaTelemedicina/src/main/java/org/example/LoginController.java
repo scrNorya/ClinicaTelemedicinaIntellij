@@ -40,6 +40,7 @@ public class LoginController {
 			}
 		} catch (Exception e) {
 			ViewUtils.generateAlert(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
