@@ -22,6 +22,8 @@ public class App extends Application {
         scene = new Scene(loadFXML("Login"), 700, 480);
         stage.setScene(scene);
         stage.show();
+//        AtestadoController.writePDFAtestado();
+
     }
 
     public static void setRoot(String fxml) throws IOException {

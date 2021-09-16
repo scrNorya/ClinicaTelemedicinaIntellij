@@ -10,4 +10,8 @@ public class AgendaController {
 	public void createRegistrarDiagnostico() throws IOException {
 		App.setRoot("RegistrarDiagnostico");
 	}
+
+	public void createAtestado() throws IOException {
+		App.setRoot("CriarAtestado");
+	}
 }
