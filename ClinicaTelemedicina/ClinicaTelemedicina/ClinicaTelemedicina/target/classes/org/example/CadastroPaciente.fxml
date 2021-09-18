@@ -34,7 +34,7 @@
             </children>
         </GridPane>
         <Button fx:id="saveButton" layoutX="502.0" layoutY="362.0" mnemonicParsing="false" onAction="#savePaciente" text="Salvar" />
-        <Button fx:id="deleteButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" onAction="#deleletePaciente" text="Excluir" />
+        <Button fx:id="deleteButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" onAction="#deletePaciente" text="Excluir" />
         <Button fx:id="findBy" layoutX="576.0" layoutY="53.0" mnemonicParsing="false" onAction="#findByCPF" text="Buscar" />
         <Button fx:id="voltarCadastro" layoutX="105.0" layoutY="362.0" mnemonicParsing="false" onAction="#goBack" text="Voltar" />
     </children>
