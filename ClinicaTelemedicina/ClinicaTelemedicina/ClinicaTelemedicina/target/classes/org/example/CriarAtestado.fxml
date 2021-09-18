@@ -9,15 +9,14 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.AtestadoController">
    <children>
       <TextField fx:id="cpfPaciente" layoutX="54.0" layoutY="53.0" />
-      <TextArea fx:id="descricaoTextArea" editable="true" layoutX="53.0" layoutY="193.0" prefHeight="91.0" prefWidth="435.0" />
+      <TextArea fx:id="descricaoTextArea" editable="false" layoutX="53.0" layoutY="253.0" prefHeight="91.0" prefWidth="435.0" />
       <Text layoutX="55.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CPF do paciente" />
-<!--      <Text fx:id="cid" layoutX="55.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CID:" />-->
-<!--      <Text fx:id="descricao" layoutX="54.0" layoutY="239.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Descrição:" />-->
-      <Button layoutX="465.0" layoutY="355.0" mnemonicParsing="false" onAction="#sendPDFAtestado" text="Gerar atestado" />
+      <Text fx:id="cid" layoutX="55.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CID:" />
+      <Text fx:id="descricao" layoutX="54.0" layoutY="239.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Descrição:" />
+      <Button layoutX="465.0" layoutY="355.0" mnemonicParsing="false" onAction="#sendPDFAtestado" text="Finalizar" />
       <Button fx:id="voltar" layoutX="29.0" layoutY="355.0" mnemonicParsing="false" onAction="#goBack" text="Voltar" />
-<!--      <TextField fx:id="cidText" layoutX="54.0" layoutY="109.0" />-->
-      <Text layoutX="54.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Duração:" />
-      <TextField fx:id="duracaoText" layoutX="53.0" layoutY="117.0" />
-      <Text layoutX="55.0" layoutY="182.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Observações:" />
+      <TextField fx:id="cidText" layoutX="54.0" layoutY="109.0" />
+      <Text layoutX="55.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Duração:" />
+      <TextField fx:id="duracaoText" layoutX="54.0" layoutY="169.0" />
    </children>
 </AnchorPane>
