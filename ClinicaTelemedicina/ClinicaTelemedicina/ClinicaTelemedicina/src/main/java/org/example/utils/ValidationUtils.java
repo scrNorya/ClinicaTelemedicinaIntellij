@@ -114,4 +114,17 @@ public class ValidationUtils {
 		throw new Exception("CRM invalido");
 	}
 
+	public static boolean isDataValid (String data) throws Exception {
+		if(!data.isEmpty() && data != null) {
+			return true;
+		}
+		throw new Exception("Data invalido");
+	}
+
+	public static boolean isHoraValid (String hora) throws Exception {
+		if(!hora.isEmpty() && hora != null) {
+			return true;
+		}
+		throw new Exception("Hora invalido");
+	}
 }
