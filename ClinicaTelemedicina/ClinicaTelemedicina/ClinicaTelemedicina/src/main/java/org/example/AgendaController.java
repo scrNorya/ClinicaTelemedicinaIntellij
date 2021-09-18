@@ -13,6 +13,10 @@ public class AgendaController {
 		App.setRoot("RegistrarDiagnostico");
 	}
 
+	public void createAtestado() throws IOException {
+		App.setRoot("CriarAtestado");
+	}
+
 	public void viewHistoricoMedico(ActionEvent actionEvent) throws IOException {
 		App.setRoot("HistoricoMedico");
 	}
