@@ -35,10 +35,12 @@ public class AtestadoController {
         try{
             medicoLogado = ApplicationContext.getInstance().getMedicoLogado();
             pacienteSelecionado = (Paciente) JsonUtils.findByCPF(cpfPaciente.getText(), JsonType.Paciente);
-            //if(ValidationUtils.isValidDuracao(this.duracaoText.getText())&&ValidationUtils.isValidCid(this.cidText.getText())){
-            date = LocalDate.now();
-            finalDate = date.plusDays(Long.parseLong(this.duracaoText.getText()));
-            this.writePDFAtestado();
+            if(ValidationUtils.isValidDuracao(duracaoText.getText().toString())){
+                date = LocalDate.now();
+                finalDate = date.plusDays(Long.parseLong(this.duracaoText.getText()));
+                this.writePDFAtestado();
+            }
+
 
             if(ViewUtils.generateConfirmationDialog("Deseja enviar o atestado gerado?")){
                 if(emailController.sendAtestado(this.pacienteSelecionado)){
@@ -75,9 +77,9 @@ public class AtestadoController {
         signature.setAlignment(Element.ALIGN_JUSTIFIED);
         signature.add(new Chunk(this.medicoLogado.getNome()+"\n", new Font(Font.TIMES_ROMAN, 12)));
         documentPDF.add(new Paragraph(" "));
-        signature.add(new Chunk(this.medicoLogado.getCrm()+"\n", new Font(Font.TIMES_ROMAN, 12)));
+        signature.add(new Chunk("CRM: "+this.medicoLogado.getCrm()+"\n", new Font(Font.TIMES_ROMAN, 12)));
         documentPDF.add(new Paragraph(" "));
-        signature.add(new Chunk(date.toString()+"\n", new Font(Font.TIMES_ROMAN, 12)));
+        signature.add(new Chunk("Data: "+date.toString()+"\n", new Font(Font.TIMES_ROMAN, 12)));
         documentPDF.add(signature);
 
     }
