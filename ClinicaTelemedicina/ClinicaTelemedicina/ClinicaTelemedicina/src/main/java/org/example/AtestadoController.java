@@ -79,7 +79,7 @@ public class AtestadoController {
         documentPDF.add(new Paragraph(" "));
         signature.add(new Chunk("CRM: "+this.medicoLogado.getCrm()+"\n", new Font(Font.TIMES_ROMAN, 12)));
         documentPDF.add(new Paragraph(" "));
-        signature.add(new Chunk("Data: "+date.toString()+"\n", new Font(Font.TIMES_ROMAN, 12)));
+        signature.add(new Chunk("Data: "+this.dataFormatter(date.toString())+"\n", new Font(Font.TIMES_ROMAN, 12)));
         documentPDF.add(signature);
 
     }
