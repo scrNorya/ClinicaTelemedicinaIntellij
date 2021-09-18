@@ -25,14 +25,14 @@ public class PacienteController {
             if (paciente != null) {
                 setVisibleText(paciente);
             } else {
-                ViewUtils.generateAlert("Paciente não encontrado");
+                ViewUtils.generateAlert("CPF não encontrado");
             }
         } catch (Exception e) {
             ViewUtils.generateAlert(e.getMessage());
         }
     }
 
-    public void deleletePaciente() {
+    public void deletePaciente() {
         try {
             if (ValidationUtils.isCpf(findCPF.getText())) {
                 if (ViewUtils.generateConfirmationDialog("Deseja excluir o cadastro?")) {
@@ -42,7 +42,7 @@ public class PacienteController {
                         ViewUtils.generateAlert("Cadastro excluído");
                         resetText();
                     } else {
-                        ViewUtils.generateAlert("Paciente não encontrado");
+                        ViewUtils.generateAlert("CPF não encontrado");
                     }
                 }
             }
@@ -64,7 +64,7 @@ public class PacienteController {
                     }
                 } else {
                     JsonUtils.writeValue(paciente);
-                    ViewUtils.generateAlert("Cadastro realizado com sucesso!");
+                    ViewUtils.generateAlert("Paciente cadastrado");
                 }
             }
         } catch (Exception e) {
