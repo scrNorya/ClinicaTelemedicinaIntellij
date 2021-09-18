@@ -20,7 +20,7 @@ import java.time.LocalDate;
 
 public class AtestadoController {
     @FXML private TextField cpfPaciente;
-    @FXML private TextField cidText;
+    //    @FXML private TextField cidText;
     @FXML private TextField duracaoText;
     @FXML private TextArea descricaoTextArea;
 
@@ -35,21 +35,22 @@ public class AtestadoController {
         try{
             medicoLogado = ApplicationContext.getInstance().getMedicoLogado();
             pacienteSelecionado = (Paciente) JsonUtils.findByCPF(cpfPaciente.getText(), JsonType.Paciente);
-            if(ValidationUtils.isValidDuracao(this.duracaoText.getText())&&ValidationUtils.isValidCid(this.cidText.getText())){
-                date = LocalDate.now();
-                finalDate = date.plusDays(Long.parseLong(this.duracaoText.getText()));
-                this.writePDFAtestado();
+            //if(ValidationUtils.isValidDuracao(this.duracaoText.getText())&&ValidationUtils.isValidCid(this.cidText.getText())){
+            date = LocalDate.now();
+            finalDate = date.plusDays(Long.parseLong(this.duracaoText.getText()));
+            this.writePDFAtestado();
 
-                if(ViewUtils.generateConfirmationDialog("Deseja enviar o atestado gerado?")){
-                    if(emailController.sendAtestado(this.pacienteSelecionado)){
-                        ViewUtils.generateAlert("Atestado enviado com sucesso!");
-                    }else{
-                        ViewUtils.generateAlert("Falha ao enviar atestado!");
-                    }
+            if(ViewUtils.generateConfirmationDialog("Deseja enviar o atestado gerado?")){
+                if(emailController.sendAtestado(this.pacienteSelecionado)){
+                    ViewUtils.generateAlert("Atestado enviado com sucesso!");
+                }else{
+                    ViewUtils.generateAlert("Falha ao enviar atestado!");
                 }
             }
+            //}
 
         }catch(Exception e){
+            e.printStackTrace();
             ViewUtils.generateAlert(e.getMessage());
         }
 
@@ -84,10 +85,20 @@ public class AtestadoController {
     private void generateBody(Document documentPDF) {
         Paragraph body = new Paragraph();
         body.setAlignment(Element.ALIGN_JUSTIFIED);
-        body.add(new Chunk("Atesto para os devidos fins que "+ this.pacienteSelecionado.getNome()+", CPF nº "+ this.pacienteSelecionado.getCpf()+", estará ausente do trabalho por motivo de doença do dia "+ this.dataFormatter(this.date
-                .toString())+" ao dia"+ this.dataFormatter(this.finalDate.toString()) , new Font(Font.TIMES_ROMAN, 12)));
+        body.add(new Chunk("Atesto para os devidos fins que "+ this.pacienteSelecionado.getNome()+", CPF nº "+ this.pacienteSelecionado.getCpf()+", estará ausente das atividades do dia "+ this.dataFormatter(this.date
+                .toString())+" ao dia "+ this.dataFormatter(this.finalDate.toString())+" por motivo de doença." , new Font(Font.TIMES_ROMAN, 12)));
         documentPDF.add(body);
         documentPDF.add(new Paragraph(" "));
+        documentPDF.add(new Paragraph(" "));
+        if(descricaoTextArea.getText().toString()!=""){
+            Paragraph observations = new Paragraph();
+            observations.setAlignment(Element.ALIGN_JUSTIFIED);
+            observations.add(new Chunk("Observações: "+descricaoTextArea.getText().toString(), new Font(Font.TIMES_ROMAN, 12)));
+            documentPDF.add(observations);
+            String teste = "";
+            teste.isBlank();
+        }
+
     }
 
     public void generateTitle(Document documentPDF){
@@ -96,7 +107,8 @@ public class AtestadoController {
         titulo.add(new Chunk("Atestado Médico", new Font(Font.HELVETICA, 24)));
         documentPDF.add(titulo);
         documentPDF.add(new Paragraph(" "));
-
+        documentPDF.add(new Paragraph(" "));
+        documentPDF.add(new Paragraph(" "));
     }
 
     public void goBack() throws IOException {
@@ -105,9 +117,9 @@ public class AtestadoController {
     }
 
     private String dataFormatter(String data) {
-        String valueData = data.split("\n")[1];
-        String[] dataArray = valueData.split("/");
-        return dataArray[2] + "-" + dataArray[1] + "-" + dataArray[0];
+        //String valueData = data.split("\n")[1];
+        String[] dataArray = data.split("-");
+        return dataArray[2] + "/" + dataArray[1] + "/" + dataArray[0];
     }
 
 }
