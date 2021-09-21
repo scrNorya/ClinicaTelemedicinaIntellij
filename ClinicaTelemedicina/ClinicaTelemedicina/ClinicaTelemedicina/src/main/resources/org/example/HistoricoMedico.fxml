@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.HistoricoMedicoController">
+   <children>
+      <GridPane layoutX="14.0" layoutY="14.0" prefHeight="367.0" prefWidth="569.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.0" minWidth="0.0" prefWidth="98.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="392.0" minWidth="10.0" prefWidth="358.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="113.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="118.0" minHeight="5.0" prefHeight="37.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="298.0" minHeight="10.0" prefHeight="257.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="83.0" minHeight="10.0" prefHeight="72.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="CPF do paciente:" />
+            <TextField fx:id="CPF" GridPane.columnIndex="1" />
+            <Button mnemonicParsing="false" onAction="#goBack" text="Voltar" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <Button mnemonicParsing="false" onAction="#onSearch" text="Pesquisar" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+            <ScrollPane prefHeight="200.0" prefWidth="200.0" style="-fx-padding: 8;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <content>
+                  <Label fx:id="consultas">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </content>
+            </ScrollPane>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

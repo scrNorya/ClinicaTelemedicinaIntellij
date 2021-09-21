@@ -36,8 +36,8 @@
                   <TableColumn prefWidth="75.0" text="DOMINGO" />
                </columns>
             </TableView>
-            <Button maxHeight="30.0" maxWidth="140.0" minHeight="30.0" minWidth="140.0" mnemonicParsing="false" text="Atestado" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-            <Button maxHeight="30.0" maxWidth="140.0" minHeight="30.0" minWidth="140.0" mnemonicParsing="false" text="Histórico Médico" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+            <Button maxHeight="30.0" maxWidth="140.0" minHeight="30.0" minWidth="140.0" mnemonicParsing="false" text="Atestado" onAction="#createAtestado" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+            <Button maxHeight="30.0" maxWidth="140.0" minHeight="30.0" minWidth="140.0" mnemonicParsing="false" text="Histórico Médico" onAction="#viewHistoricoMedico" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
             <Button maxHeight="30.0" maxWidth="140.0" minHeight="30.0" minWidth="140.0" mnemonicParsing="false" text="Diagnóstico" onAction="#createRegistrarDiagnostico" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
             <Button mnemonicParsing="false" text="&lt;" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
             <Button mnemonicParsing="false" text="&gt;" GridPane.columnIndex="3" GridPane.halignment="LEFT" />

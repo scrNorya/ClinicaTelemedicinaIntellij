@@ -127,4 +127,23 @@ public class ValidationUtils {
 		}
 		throw new Exception("Hora invalido");
 	}
+
+	public static boolean isValidDuracao(String duracao) throws Exception {
+		if(duracao!=null && duracao.matches("[+-]?\\d*(\\.\\d+)?")){
+			return true;
+		}
+		throw new Exception("Duração inválida");
+	}
+
+	public static boolean isValidCid(String senha) throws Exception {
+		if(senha != null) {
+			if(senha.length() >= 3) {
+				return true;
+			}
+		}
+		throw new Exception("Cid inválido");
+	}
+
+
+
 }

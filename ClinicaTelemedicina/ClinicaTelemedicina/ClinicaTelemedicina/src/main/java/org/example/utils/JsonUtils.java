@@ -2,9 +2,7 @@ package org.example.utils;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.model.*;
@@ -225,5 +223,64 @@ public class JsonUtils {
         values.put("horario",consulta.getHorario());
         consultasJson.replace(idConsulta,values);
         objectMapper.writeValue(new File(JsonType.Consulta.getPath()), consultasJson);
+    }
+
+    public static ArrayList<Consulta> getConsultasFromPacienteByCPF(String CPF) throws Exception {
+        if (ValidationUtils.isCpf(CPF)) {
+            Map<String, Object> consultasJson = JsonUtils.readValues(JsonType.Consulta);
+            Set<Map.Entry<String, Object>> mapSet = consultasJson.entrySet();
+            ArrayList<Consulta> consultas = new ArrayList<>();
+            Map<String, Object> values;
+            for (Map.Entry<String, Object> entry : mapSet) {
+                values = (Map<String, Object>) entry.getValue();
+                if (values.get("pacienteConsulta").toString().equals(CPF)) {
+                    consultas.add(new Consulta(
+                            values.get("cid").toString(),
+                            values.get("data").toString(),
+                            values.get("diagnostico").toString(),
+                            values.get("sala").toString(),
+                            values.get("medicoConsulta").toString(),
+                            values.get("pacienteConsulta").toString(),
+                            values.get("horario").toString()
+                    ));
+                }
+            }
+            if (consultas.isEmpty()) {
+                throw new Exception("CPF não encontrado");
+            } else {
+                return consultas;
+            }
+        }
+        return null;
+    }
+
+    public static ArrayList<Consulta> getConlsultasFromPacienteAndMedicoByCPF(String pacienteCPF, String medicoCPF) throws Exception {
+        if (ValidationUtils.isCpf(pacienteCPF) && ValidationUtils.isCpf(medicoCPF)) {
+            Map<String, Object> consultasJson = JsonUtils.readValues(JsonType.Consulta);
+            Set<Map.Entry<String, Object>> mapSet = consultasJson.entrySet();
+            ArrayList<Consulta> consultas = new ArrayList<>();
+            Map<String, Object> values;
+            for (Map.Entry<String, Object> entry : mapSet) {
+                values = (Map<String, Object>) entry.getValue();
+                if (values.get("pacienteConsulta").toString().equals(pacienteCPF)
+                        && values.get("medicoConsulta").toString().equals(medicoCPF)) {
+                    consultas.add(new Consulta(
+                            values.get("cid").toString(),
+                            values.get("data").toString(),
+                            values.get("diagnostico").toString(),
+                            values.get("sala").toString(),
+                            values.get("medicoConsulta").toString(),
+                            values.get("pacienteConsulta").toString(),
+                            values.get("horario").toString()
+                    ));
+                }
+            }
+            if (consultas.isEmpty()) {
+                throw new Exception("Paciente sem consultas realizadas médico especificado");
+            } else {
+                return consultas;
+            }
+        }
+        return null;
     }
 }
