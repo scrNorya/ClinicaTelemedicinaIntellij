@@ -47,7 +47,7 @@ public class ConsultaController implements Initializable {
     }
 
     public void saveConsulta() {
-
+        //Verificar data e hora
         String userData = "";
         String userHorario = "";
         String userMedicoConsulta = "";
@@ -133,7 +133,7 @@ public class ConsultaController implements Initializable {
     }
 
     public void deleteConsulta() throws IOException, URISyntaxException {
-
+        //Validar se a consulta ja passou
         String userData = data.getText();
         String userHorario = horario.getText();
         String userMedicoConsulta = medicoConsulta.getText();
@@ -153,11 +153,44 @@ public class ConsultaController implements Initializable {
                    userPacienteConsulta.equals(pesquisaConsulta.getPacienteConsulta())){
 
                 JsonUtils.deleteValue(entry.getKey().toString(), JsonType.Consulta);
-                ViewUtils.generateAlert("Consulta excluida com sucess");
+                ViewUtils.generateAlert("Consulta excluida com sucesso");
                 resetText();
 
             }
+        }
+    }
 
+    public void editConsulta() throws URISyntaxException, IOException {
+
+        String userData = data.getText();
+        String userHorario = horario.getText();
+        String userMedicoConsulta = medicoConsulta.getText();
+        String userPacienteConsulta = pacienteConsulta.getText();
+
+        Map<String, Object> consultas = readValues(JsonType.Consulta);
+
+        for (Map.Entry entry : consultas.entrySet()) {
+            Map<String, Object> consultaObjeto = (Map<String, Object>) entry.getValue();
+            Consulta pesquisaConsulta = new Consulta(consultaObjeto.get("cid").toString(), consultaObjeto.get("data").toString(),
+                    consultaObjeto.get("diagnostico").toString(), consultaObjeto.get("sala").toString(),
+                    consultaObjeto.get("medicoConsulta").toString(), consultaObjeto.get("pacienteConsulta").toString(),
+                    consultaObjeto.get("horario").toString());
+
+            if (consultaSelecionada.getData().equals(pesquisaConsulta.getData()) &&
+                    consultaSelecionada.getHorario().equals(pesquisaConsulta.getHorario()) &&
+                    consultaSelecionada.getMedicoConsulta().equals(pesquisaConsulta.getMedicoConsulta()) &&
+                    consultaSelecionada.getPacienteConsulta().equals(pesquisaConsulta.getPacienteConsulta())) {
+
+                pesquisaConsulta.setData(userData);
+                pesquisaConsulta.setHorario(userHorario);
+                pesquisaConsulta.setMedicoConsulta(userMedicoConsulta);
+                pesquisaConsulta.setPacienteConsulta(userPacienteConsulta);
+
+                JsonUtils.updateValue(pesquisaConsulta,entry.getKey().toString());
+                ViewUtils.generateAlert("Consulta editada com sucesso");
+
+
+            }
         }
     }
 
