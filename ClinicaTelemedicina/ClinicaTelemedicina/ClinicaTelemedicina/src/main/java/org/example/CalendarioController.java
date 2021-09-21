@@ -33,6 +33,8 @@ import java.util.ResourceBundle;
 public class CalendarioController implements Initializable {
 
     LocalDate day = LocalDate.now().with(DayOfWeek.MONDAY);
+    @FXML
+    Button createConsultaBtn;
 
     public void logout() {
         try {
@@ -88,7 +90,7 @@ public class CalendarioController implements Initializable {
                 setStyle("-fx-background-color: #cb9f45; -fx-text-fill: white;");
             }  else {
                 setText(item);
-                setStyle("-fx-background-color: red; -fx-text-fill: white;");
+                setStyle("-fx-background-color: #D8392B; -fx-text-fill: white;");
             }
         }
     }
@@ -220,6 +222,10 @@ public class CalendarioController implements Initializable {
     );
 
     public void init() throws URISyntaxException, IOException {
+        if(ApplicationContext.getInstance().getConsultaSelecionada() != null) {
+            createConsultaBtn.setDisable(false);
+        }
+
         hora.setCellValueFactory(new PropertyValueFactory<>("hora"));
 
         MONDAY.setCellValueFactory(new PropertyValueFactory<>("MONDAY"));
@@ -416,12 +422,15 @@ public class CalendarioController implements Initializable {
                         break;
                     case "FRIDAY":
                         item.setFRIDAY(" " + item.getFRIDAY());
-                    break;
+                        break;
                 }
 
                 String cpf = (String) col.getCellObservableValue(item).getValue();
                 cpf.replaceAll(" ", "");
                 this.setConsulta(calendar.getFocusModel().getFocusedCell().getTableColumn().getText(), calendar.getSelectionModel().getSelectedItem().getHora(), cpf);
+                if(ApplicationContext.getInstance().getConsultaSelecionada() != null) {
+                    createConsultaBtn.setDisable(false);
+                }
             }
         } else {
             calendar.setSelectionModel(null);
@@ -449,8 +458,6 @@ public class CalendarioController implements Initializable {
                     if (dataFormated.equals(values.get("data")) && hora.equals(values.get("horario"))) {
                         Consulta consultaSelecionada = new Consulta("", dataFormated, "", values.get("sala").toString(), values.get("medicoConsulta").toString(), values.get("pacienteConsulta").toString(), values.get("horario").toString());
                         ApplicationContext.getInstance().setConsultaSelecionada(consultaSelecionada);
-                        ApplicationContext.getInstance().getConsultaSelecionada(); // Para testar
-
                     }
                 }
             }
