@@ -140,6 +140,22 @@ public class JsonUtils {
         objectMapper.writeValue(new File(JsonType.Medico.getPath()), json);
     }
 
+    public static void updateValue(Consulta consulta, String key) throws URISyntaxException, IOException {
+        Map<String, Object> json = readValues(JsonType.Consulta);
+        Map<String, Object> values = new HashMap<>();
+
+        values.put("cid",consulta.getCid());
+        values.put("data",consulta.getData());
+        values.put("diagnostico",consulta.getDiagnostico());
+        values.put("sala",consulta.getSala());
+        values.put("medicoConsulta",consulta.getMedicoConsulta());
+        values.put("pacienteConsulta",consulta.getPacienteConsulta());
+        values.put("horario",consulta.getHorario());
+
+        json.replace(key, values);
+        objectMapper.writeValue(new File(JsonType.Consulta.getPath()), json);
+    }
+
     public static void deleteValue(String key, JsonType jsonType) throws URISyntaxException, IOException {
         Map<String, Object> json = readValues(jsonType);
         json.remove(key);

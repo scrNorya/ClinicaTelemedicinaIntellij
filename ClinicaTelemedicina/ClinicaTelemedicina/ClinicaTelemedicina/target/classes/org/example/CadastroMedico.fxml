@@ -10,9 +10,9 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.example.ConsultaController"
+            fx:controller="org.example.MedicoController"
             prefHeight="400.0" prefWidth="600.0">
-    <children>
+<children>
         <GridPane layoutX="105.0" layoutY="47.0" prefHeight="299.0" prefWidth="445.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="94.0" />
@@ -29,18 +29,25 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <TextField fx:id="data"  GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField fx:id="horario"  GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <TextField fx:id="medicoConsulta" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <TextField fx:id="pacienteConsulta" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                <Label text="Data :" GridPane.rowIndex="1" />
-                <Label text="Hora:" GridPane.rowIndex="2" />
-                <Label text="CPF do médico:" GridPane.rowIndex="3" />
-                <Label text="CPF do paciente:" GridPane.rowIndex="4" />
+                <Label prefHeight="21.0" prefWidth="178.0" text="Buscar por CPF:" />
+                <TextField fx:id="findCPF" GridPane.columnIndex="1" />
+                <TextField fx:id="name" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="CPF" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="CRM" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <TextField fx:id="email" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <TextField fx:id="endereco" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                <TextField fx:id="telefone" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                <Label text="Nome:" GridPane.rowIndex="2" />
+                <Label text="CPF:" GridPane.rowIndex="3" />
+                <Label text="CRM:" GridPane.rowIndex="4" />
+                <Label text="E-mail:" GridPane.rowIndex="5" />
+                <Label text="Endereço:" GridPane.rowIndex="6" />
+                <Label text="Telefone:" GridPane.rowIndex="7" />
             </children>
         </GridPane>
-        <Button fx:id="saveButton" layoutX="502.0" layoutY="362.0" mnemonicParsing="false" onAction="#createConsulta" text="Salvar" />
-        <Button fx:id="deleteButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" onAction="#deleteConsulta" text="Excluir" />
+        <Button fx:id="saveButton" layoutX="502.0" layoutY="362.0" mnemonicParsing="false" onAction="#saveMedico" text="Salvar" />
+        <Button fx:id="deleteButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" onAction="#deleteMedico" text="Excluir" />
+        <Button fx:id="findBy" layoutX="576.0" layoutY="53.0" mnemonicParsing="false" onAction="#findByCPF" text="Buscar" />
         <Button fx:id="voltarCadastro" layoutX="105.0" layoutY="362.0" mnemonicParsing="false" text="Voltar" onAction="#goBack" />
     </children>
 </AnchorPane>

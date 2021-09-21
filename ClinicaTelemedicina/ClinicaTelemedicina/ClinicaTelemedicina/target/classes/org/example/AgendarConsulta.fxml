@@ -29,8 +29,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <TextField fx:id="data"  GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField fx:id="horario"  GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="data"  promptText="AAAA-MM-DD" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="horario" promptText="00" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <TextField fx:id="medicoConsulta" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                 <TextField fx:id="pacienteConsulta" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <Label text="Data :" GridPane.rowIndex="1" />
