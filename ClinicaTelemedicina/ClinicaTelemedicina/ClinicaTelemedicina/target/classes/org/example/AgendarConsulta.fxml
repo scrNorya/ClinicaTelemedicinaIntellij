@@ -29,8 +29,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <TextField fx:id="data" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField fx:id="horario" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="data"  promptText="AAAA-MM-DD" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="horario" promptText="00" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <TextField fx:id="medicoConsulta" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                 <TextField fx:id="pacienteConsulta" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <Label text="Data :" GridPane.rowIndex="1" />
@@ -39,7 +39,7 @@
                 <Label text="CPF do paciente:" GridPane.rowIndex="4" />
             </children>
         </GridPane>
-        <Button fx:id="saveButton" layoutX="502.0" layoutY="362.0" mnemonicParsing="false" onAction="#saveConsulta" text="Salvar" />
+        <Button fx:id="saveButton" layoutX="502.0" layoutY="362.0" mnemonicParsing="false" onAction="#createConsulta" text="Salvar" />
         <Button fx:id="deleteButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" onAction="#deleteConsulta" text="Excluir" />
         <Button fx:id="voltarCadastro" layoutX="105.0" layoutY="362.0" mnemonicParsing="false" text="Voltar" onAction="#goBack" />
     </children>

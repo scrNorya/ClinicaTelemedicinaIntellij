@@ -46,6 +46,14 @@ public class ConsultaController implements Initializable {
 
     }
 
+    public void createConsulta() throws URISyntaxException, IOException {
+        if (consultaSelecionada.getPacienteConsulta() == null || consultaSelecionada.getPacienteConsulta() == ""){
+            saveConsulta();
+        }else {
+            editConsulta();
+        }
+    }
+
     public void saveConsulta() {
         //Verificar data e hora
         String userData = "";
