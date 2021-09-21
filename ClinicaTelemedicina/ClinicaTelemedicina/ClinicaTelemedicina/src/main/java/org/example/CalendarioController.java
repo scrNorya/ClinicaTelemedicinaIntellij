@@ -83,8 +83,10 @@ public class CalendarioController implements Initializable {
             if (empty || getTableRow() == null || item == "") {
                 setText(null);
                 setGraphic(null);
-                setStyle("-fx background-color: transparent;");
-            } else {
+                setStyle("-fx-background-color: transparent;");
+            } else if (item.charAt(0) == ' ') {
+                setStyle("-fx-background-color: #cb9f45; -fx-text-fill: white;");
+            }  else {
                 setText(item);
                 setStyle("-fx-background-color: red; -fx-text-fill: white;");
             }
@@ -394,18 +396,47 @@ public class CalendarioController implements Initializable {
         String id = calendar.getFocusModel().getFocusedCell().getTableColumn().getId();
         if (medicoComboBox.getValue() != null) {
             if (!id.equals("hora")) {
-
                 TablePosition pos = calendar.getSelectionModel().getSelectedCells().get(0);
+                TableColumn col = pos.getTableColumn();
                 int row = pos.getRow();
                 PacienteConsulta item = calendar.getItems().get(row);
-                TableColumn col = pos.getTableColumn();
+                removeBlankSpaces();
+                switch (col.getId()) {
+                    case "MONDAY":
+                        item.setMONDAY(" " + item.getMONDAY());
+                        break;
+                    case "TUESDAY":
+                        item.setTUESDAY(" " + item.getTUESDAY());
+                        break;
+                    case "WEDNESDAY":
+                        item.setWEDNESDAY(" " + item.getWEDNESDAY());
+                        break;
+                    case "THURSDAY":
+                        item.setTHURSDAY(" " + item.getTHURSDAY());
+                        break;
+                    case "FRIDAY":
+                        item.setFRIDAY(" " + item.getFRIDAY());
+                    break;
+                }
+
                 String cpf = (String) col.getCellObservableValue(item).getValue();
+                cpf.replaceAll(" ", "");
                 this.setConsulta(calendar.getFocusModel().getFocusedCell().getTableColumn().getText(), calendar.getSelectionModel().getSelectedItem().getHora(), cpf);
             }
         } else {
             calendar.setSelectionModel(null);
             ViewUtils.generateAlert("Selecione um medico");
         }
+    }
+
+    private void removeBlankSpaces(){
+        list.forEach(pc -> {
+            pc.setMONDAY(pc.getMONDAY().replaceAll(" ", ""));
+            pc.setTUESDAY(pc.getTUESDAY().replaceAll(" ", ""));
+            pc.setWEDNESDAY(pc.getWEDNESDAY().replaceAll(" ", ""));
+            pc.setTHURSDAY(pc.getTHURSDAY().replaceAll(" ", ""));
+            pc.setFRIDAY(pc.getFRIDAY().replaceAll(" ", ""));
+        });
     }
 
     private void setConsulta(String data, String hora, String cpfPaciente) throws URISyntaxException, IOException {
@@ -426,7 +457,6 @@ public class CalendarioController implements Initializable {
         } else {
             Consulta consutaMarcada = new Consulta("", dataFormated, "", "", medicoComboBox.getValue().getCpf(), "", hora);
             ApplicationContext.getInstance().setConsultaSelecionada(consutaMarcada);
-            ApplicationContext.getInstance().getConsultaSelecionada();// Para testar
         }
     }
 
