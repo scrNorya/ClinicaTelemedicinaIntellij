@@ -1,6 +1,7 @@
 package org.example;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.example.model.Consulta;
@@ -10,14 +11,16 @@ import org.example.utils.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static org.example.utils.JsonUtils.findByCPF;
 import static org.example.utils.JsonUtils.readValues;
 
-public class ConsultaController {
+public class ConsultaController implements Initializable {
 
     @FXML
     private TextField data;
@@ -34,9 +37,13 @@ public class ConsultaController {
     @FXML
     private TextField sala;
 
+
+    Consulta consultaSelecionada = ApplicationContext.getInstance().getConsultaSelecionada();
+
     private EmailController emailController = new EmailController();
 
     public ConsultaController() {
+
     }
 
     public void saveConsulta() {
@@ -125,11 +132,56 @@ public class ConsultaController {
         App.setRoot("Calendario");
     }
 
-    public void deleteConsulta() throws IOException {
+    public void deleteConsulta() throws IOException, URISyntaxException {
 
+        String userData = data.getText();
+        String userHorario = horario.getText();
+        String userMedicoConsulta = medicoConsulta.getText();
+        String userPacienteConsulta = pacienteConsulta.getText();
 
+        Map<String, Object> consultas = readValues(JsonType.Consulta);
+
+        for (Map.Entry entry : consultas.entrySet()) {
+            Map<String, Object> consultaObjeto = (Map<String, Object>) entry.getValue();
+            Consulta pesquisaConsulta = new Consulta(consultaObjeto.get("cid").toString(), consultaObjeto.get("data").toString(),
+                    consultaObjeto.get("diagnostico").toString(), consultaObjeto.get("sala").toString(),
+                    consultaObjeto.get("medicoConsulta").toString(), consultaObjeto.get("pacienteConsulta").toString(),
+                    consultaObjeto.get("horario").toString());
+
+            if (userData.equals(pesquisaConsulta.getData()) && userHorario.equals(pesquisaConsulta.getHorario())
+                    && userMedicoConsulta.equals(pesquisaConsulta.getMedicoConsulta()) &&
+                   userPacienteConsulta.equals(pesquisaConsulta.getPacienteConsulta())){
+
+                JsonUtils.deleteValue(entry.getKey().toString(), JsonType.Consulta);
+                ViewUtils.generateAlert("Consulta excluida com sucess");
+                resetText();
+
+            }
+
+        }
     }
 
-    public void setVisibleText() {
+    private void setVisibleText(Consulta consulta) {
+        this.data.setText(consulta.getData());
+        this.horario.setText(consulta.getHorario());
+        this.medicoConsulta.setText(consulta.getMedicoConsulta());
+        this.pacienteConsulta.setText(consulta.getPacienteConsulta());
+    }
+
+    private void resetText() {
+        this.data.setText("");
+        this.horario.setText("");
+        this.medicoConsulta.setText("");
+        this.pacienteConsulta.setText("");
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            setVisibleText(consultaSelecionada);
+        }catch (Exception e) {
+            ViewUtils.generateAlert(e.getMessage());
+        }
+
     }
 }
