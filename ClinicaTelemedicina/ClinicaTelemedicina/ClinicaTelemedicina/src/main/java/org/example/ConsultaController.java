@@ -19,16 +19,24 @@ import static org.example.utils.JsonUtils.readValues;
 
 public class ConsultaController {
 
-    @FXML private TextField data;
-    @FXML private TextField horario;
-    @FXML private TextField medicoConsulta;
-    @FXML private TextField pacienteConsulta;
-    @FXML private TextField cid;
-    @FXML private TextField diagnostico;
-    @FXML private TextField sala;
+    @FXML
+    private TextField data;
+    @FXML
+    private TextField horario;
+    @FXML
+    private TextField medicoConsulta;
+    @FXML
+    private TextField pacienteConsulta;
+    @FXML
+    private TextField cid;
+    @FXML
+    private TextField diagnostico;
+    @FXML
+    private TextField sala;
 
+    private EmailController emailController = new EmailController();
 
-    public ConsultaController(){
+    public ConsultaController() {
     }
 
     public void saveConsulta() {
@@ -51,32 +59,30 @@ public class ConsultaController {
                 userMedicoConsulta = medicoConsulta.getText();
                 userPacienteConsulta = pacienteConsulta.getText();
 
-                if (JsonUtils.findByCPF(userMedicoConsulta , JsonType.Medico) == null){
+                if (JsonUtils.findByCPF(userMedicoConsulta, JsonType.Medico) == null) {
                     ViewUtils.generateAlert("Médico inválido");
-                }
-                else if (JsonUtils.findByCPF(userPacienteConsulta, JsonType.Paciente) == null) {
+                } else if (JsonUtils.findByCPF(userPacienteConsulta, JsonType.Paciente) == null) {
                     ViewUtils.generateAlert("Paciente inválido");
-                }
-                else{
+                } else {
                     Map<String, Object> consultas = readValues(JsonType.Consulta);
 
-                    for(Map.Entry entry: consultas.entrySet()){
+                    for (Map.Entry entry : consultas.entrySet()) {
                         Map<String, Object> consultaObjeto = (Map<String, Object>) entry.getValue();
-                        Consulta pesquisaConsulta = new Consulta(consultaObjeto.get("cid").toString(),consultaObjeto.get("data").toString(),
+                        Consulta pesquisaConsulta = new Consulta(consultaObjeto.get("cid").toString(), consultaObjeto.get("data").toString(),
                                 consultaObjeto.get("diagnostico").toString(), consultaObjeto.get("sala").toString(),
                                 consultaObjeto.get("medicoConsulta").toString(), consultaObjeto.get("pacienteConsulta").toString(),
                                 consultaObjeto.get("horario").toString());
 
                         if (userData.equals(pesquisaConsulta.getData()) && userHorario.equals(pesquisaConsulta.getHorario()) &&
-                                userMedicoConsulta.equals(pesquisaConsulta.getMedicoConsulta())){
+                                userMedicoConsulta.equals(pesquisaConsulta.getMedicoConsulta())) {
                             ViewUtils.generateAlert("O Médico já possui uma consulta marcada nesse horario");
-                            break;
+                            return;
 
 
-                        }else if (userData.equals(pesquisaConsulta.getData()) && userHorario.equals(pesquisaConsulta.getHorario()) &&
-                                userPacienteConsulta.equals(pesquisaConsulta.getPacienteConsulta())){
+                        } else if (userData.equals(pesquisaConsulta.getData()) && userHorario.equals(pesquisaConsulta.getHorario()) &&
+                                userPacienteConsulta.equals(pesquisaConsulta.getPacienteConsulta())) {
                             ViewUtils.generateAlert("O paciente já possui uma consulta marcada nesse horario");
-                            break;
+                            return;
 
                         }
                     }
@@ -84,6 +90,7 @@ public class ConsultaController {
                             userPacienteConsulta, userHorario);
                     consulta.setSala(alocaSala(consulta));
                     JsonUtils.writeValue(consulta);
+                    emailController.sendConsultaConfirmation(consulta, (Paciente) JsonUtils.findByCPF(userPacienteConsulta, JsonType.Paciente), JsonType.Paciente);
                     ViewUtils.generateAlert("Consulta agendada com sucesso!");
                 }
             } else {
@@ -106,7 +113,7 @@ public class ConsultaController {
                     consultaObjeto.get("medicoConsulta").toString(), consultaObjeto.get("pacienteConsulta").toString(),
                     consultaObjeto.get("horario").toString());
 
-            if (consulta.getData().equals(pesquisaConsulta.getData()) && consulta.getHorario().equals(pesquisaConsulta.getHorario())){
+            if (consulta.getData().equals(pesquisaConsulta.getData()) && consulta.getHorario().equals(pesquisaConsulta.getHorario())) {
                 salasAlocadas++;
             }
         }
@@ -119,11 +126,10 @@ public class ConsultaController {
     }
 
     public void deleteConsulta() throws IOException {
-        //deletar consulta
-        goBack();
+
+
     }
 
-    public void setVisibleText(){
+    public void setVisibleText() {
     }
-
 }

@@ -6,6 +6,7 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import org.example.model.Consulta;
 import org.example.model.Funcionario;
 import org.example.model.Paciente;
 import org.example.utils.JsonType;
@@ -86,4 +87,35 @@ public class EmailController {
         }
 
     }
+
+    public void sendConsultaConfirmation(Consulta consulta, Paciente paciente, JsonType personType) {
+        String email = "disclinicadisc@gmail.com";
+        String senha = "Aps21dahora";
+        String destinationEmail = paciente.getEmail();
+        String subject = "Confirmação de consulta";
+        String msg = "Olá, sua consulta foi marcada com sucesso!\n\nSala: " + consulta.getSala() + "\nData: " +
+                consulta.getData() + "\nHorario: " + consulta.getHorario() +" horas"+ "\nLink: https://discord.gg/qpUDQVK6ep";
+        MimeMessage mail = new MimeMessage(this.session);
+
+        try {
+            InternetAddress destinyEmail =  new InternetAddress(destinationEmail);
+            destinyEmail.validate();
+
+            mail.setFrom(new InternetAddress(email));
+            mail.addRecipient(Message.RecipientType.TO,destinyEmail);
+            mail.setSubject(subject);
+            mail.setText(msg);
+
+
+            Transport transport = session.getTransport("smtp");
+            transport.connect(email,senha);
+            transport.sendMessage(mail, mail.getRecipients(Message.RecipientType.TO));
+            transport.close();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
 }
