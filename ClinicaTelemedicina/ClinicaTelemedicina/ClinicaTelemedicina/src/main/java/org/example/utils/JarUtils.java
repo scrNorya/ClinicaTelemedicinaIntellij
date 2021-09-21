@@ -1,11 +1,16 @@
 package org.example.utils;
 
+import java.net.URL;
+import java.util.Objects;
+
 public class JarUtils {
     public static boolean isRunningFromJar() {
-        String classJar = JarUtils.class.getResource("jarUtils.class").toString();
-        if (classJar.startsWith("jar:")) {
-            return true;
+        URL resource = JarUtils.class.getResource("");
+        if(resource != null) {
+            String protocol = resource.getProtocol();
+            return Objects.equals(protocol, "jar");
+        } else {
+            return false;
         }
-        return false;
     }
 }
