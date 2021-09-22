@@ -125,7 +125,7 @@ public class JsonUtils {
     }
 
     public static void updateValue(Medico medico, String key) throws URISyntaxException, IOException {
-        Map<String, Object> json = readValues(JsonType.Recepcionista);
+        Map<String, Object> json = readValues(JsonType.Medico);
         Map<String, Object> values = new HashMap<>();
 
         values.put("cpf", medico.getCpf());
@@ -292,7 +292,7 @@ public class JsonUtils {
                 }
             }
             if (consultas.isEmpty()) {
-                throw new Exception("Paciente sem consultas realizadas médico especificado");
+                throw new Exception("Paciente sem consultas realizadas com médico especificado");
             } else {
                 return consultas;
             }
