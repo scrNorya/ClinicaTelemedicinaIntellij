@@ -16,6 +16,7 @@ import org.example.utils.ViewUtils;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 
 public class AtestadoController {
@@ -79,9 +80,24 @@ public class AtestadoController {
         documentPDF.add(new Paragraph(" "));
         signature.add(new Chunk("CRM: "+this.medicoLogado.getCrm()+"\n", new Font(Font.TIMES_ROMAN, 12)));
         documentPDF.add(new Paragraph(" "));
+        LocalTime time = LocalTime.now();
+        String formattedTime = this.formattedTime(time);
+        signature.add(new Chunk("Gerado às "+formattedTime+"\n", new Font(Font.TIMES_ROMAN, 12)));
         signature.add(new Chunk("Data: "+this.dataFormatter(date.toString())+"\n", new Font(Font.TIMES_ROMAN, 12)));
         documentPDF.add(signature);
 
+    }
+
+    private String formattedTime(LocalTime time){
+        String hourFormatted = Integer.toString(time.getHour());
+        String minuteFormatted = Integer.toString(time.getMinute());
+        if(time.getHour()<10){
+            hourFormatted = "0"+Integer.toString(time.getHour());
+        }
+        if(time.getMinute()<10){
+            minuteFormatted = "0"+Integer.toString(time.getMinute());
+        }
+        return hourFormatted+":"+minuteFormatted;
     }
 
     private void generateBody(Document documentPDF) {
