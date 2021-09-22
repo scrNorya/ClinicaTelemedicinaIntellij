@@ -35,8 +35,7 @@ public class CalendarioController implements Initializable {
     LocalDate day = LocalDate.now().with(DayOfWeek.MONDAY);
     @FXML
     Button createConsultaBtn;
-    Consulta consultaMarcada = null;
-
+    Consulta consultaMarcada;
     public void logout() {
         try {
             App.setRoot("Login");
