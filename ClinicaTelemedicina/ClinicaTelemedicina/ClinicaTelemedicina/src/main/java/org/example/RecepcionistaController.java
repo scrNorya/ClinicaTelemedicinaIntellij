@@ -19,13 +19,18 @@ public class RecepcionistaController {
 	private EmailController emailController = new EmailController();
 
 	public Recepcionista findByCPF() throws Exception {
-		String cpf = this.findCPF.getText();
-		Recepcionista recepcionista = (Recepcionista) JsonUtils.findByCPF(cpf, JsonType.Recepcionista);
-		if (recepcionista != null) {
-			this.setVisibleText(recepcionista);
-			return recepcionista;
-		} else {
-			ViewUtils.generateAlert("Cpf não encontrado!");
+		try{
+			String cpf = this.findCPF.getText();
+			Recepcionista recepcionista = (Recepcionista) JsonUtils.findByCPF(cpf, JsonType.Recepcionista);
+			if (recepcionista != null) {
+				this.setVisibleText(recepcionista);
+				return recepcionista;
+			} else {
+				ViewUtils.generateAlert("Cpf não encontrado!");
+			}
+			return null;
+		}catch(Exception e){
+			ViewUtils.generateAlert(e.getMessage());
 		}
 		return null;
 	}
