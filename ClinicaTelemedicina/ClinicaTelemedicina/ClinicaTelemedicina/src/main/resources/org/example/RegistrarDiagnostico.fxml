@@ -9,7 +9,7 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.RegistrarDiagnosticoController">
    <children>
       <TextField fx:id="buscaTextField" layoutX="54.0" layoutY="53.0" />
-      <TextArea fx:id="diagnosticoTextArea" layoutX="53.0" layoutY="145.0" editable="false" prefHeight="199.0" prefWidth="494.0" />
+      <TextArea fx:id="diagnosticoTextArea" editable="false" layoutX="55.0" layoutY="206.0" prefHeight="138.0" prefWidth="492.0" />
       <Text layoutX="55.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buscar paciente por CPF:" />
       <Text fx:id="pacienteText" layoutX="53.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Paciente: " />
       <Text fx:id="dataText" layoutX="53.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data: " />
@@ -17,5 +17,8 @@
       <Button layoutX="223.0" layoutY="53.0" mnemonicParsing="false" onAction="#findPaciente" text="Buscar" />
       <Button layoutX="465.0" layoutY="355.0" mnemonicParsing="false" onAction="#saveDiagnostico" text="Finalizar" />
       <Button fx:id="voltar" layoutX="29.0" layoutY="355.0" mnemonicParsing="false" onAction="#goBack" text="Voltar" />
+      <Text layoutX="57.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Diagnóstico:" />
+      <TextField fx:id="cidTextField" layoutX="54.0" layoutY="158.0" />
+      <Text layoutX="57.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CID:" />
    </children>
 </AnchorPane>
