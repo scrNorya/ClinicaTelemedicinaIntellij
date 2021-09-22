@@ -426,7 +426,7 @@ public class CalendarioController implements Initializable {
                 }
 
                 String cpf = (String) col.getCellObservableValue(item).getValue();
-                cpf.replaceAll(" ", "");
+                cpf = cpf.replaceAll(" ", "");
                 this.setConsulta(calendar.getFocusModel().getFocusedCell().getTableColumn().getText(), calendar.getSelectionModel().getSelectedItem().getHora(), cpf);
                 if(ApplicationContext.getInstance().getConsultaSelecionada() != null) {
                     createConsultaBtn.setDisable(false);

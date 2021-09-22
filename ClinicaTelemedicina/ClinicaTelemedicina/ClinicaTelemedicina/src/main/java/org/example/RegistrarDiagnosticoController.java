@@ -33,6 +33,7 @@ public class RegistrarDiagnosticoController {
     @FXML private Text pacienteText;
     @FXML private Text dataText;
     @FXML private Text horarioText;
+    @FXML private TextField cidTextField;
     private Medico medicoLogado;
     private Paciente pacienteBusca;
     private Consulta consulta;
@@ -115,6 +116,7 @@ public class RegistrarDiagnosticoController {
             if(!consulta.getDiagnostico().isBlank()||!consulta.getDiagnostico().isEmpty()){
                 if(ViewUtils.generateConfirmationDialog("Deseja substituir o diagnóstico salvo?")){
                     consulta.setDiagnostico(diagnostico);
+                    consulta.setCid(cidTextField.getText());
                     JsonUtils.saveConsulta(idConsulta, consulta);
                     ViewUtils.generateAlert("Diagnóstico salvo com sucesso!");
                 }
