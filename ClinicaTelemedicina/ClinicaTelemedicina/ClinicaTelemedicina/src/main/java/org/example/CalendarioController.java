@@ -35,6 +35,7 @@ public class CalendarioController implements Initializable {
     LocalDate day = LocalDate.now().with(DayOfWeek.MONDAY);
     @FXML
     Button createConsultaBtn;
+    Consulta consultaMarcada = null;
 
     public void logout() {
         try {
@@ -57,7 +58,7 @@ public class CalendarioController implements Initializable {
     }
 
     public void createConsulta() throws IOException {
-
+        ApplicationContext.getInstance().setConsultaSelecionada(consultaMarcada);
         App.setRoot("AgendarConsulta");
     }
 
@@ -222,7 +223,7 @@ public class CalendarioController implements Initializable {
     );
 
     public void init() throws URISyntaxException, IOException {
-        if(ApplicationContext.getInstance().getConsultaSelecionada() != null) {
+        if(consultaMarcada != null) {
             createConsultaBtn.setDisable(false);
         }
 
@@ -428,7 +429,7 @@ public class CalendarioController implements Initializable {
                 String cpf = (String) col.getCellObservableValue(item).getValue();
                 cpf = cpf.replaceAll(" ", "");
                 this.setConsulta(calendar.getFocusModel().getFocusedCell().getTableColumn().getText(), calendar.getSelectionModel().getSelectedItem().getHora(), cpf);
-                if(ApplicationContext.getInstance().getConsultaSelecionada() != null) {
+                if(consultaMarcada != null) {
                     createConsultaBtn.setDisable(false);
                 }
             }
@@ -456,14 +457,12 @@ public class CalendarioController implements Initializable {
                 Map<String, Object> values = (Map<String, Object>) entry.getValue();
                 if (medicoComboBox.getValue().getCpf().equals(values.get("medicoConsulta")) && cpfPaciente.equals(values.get("pacienteConsulta"))) {
                     if (dataFormated.equals(values.get("data")) && hora.equals(values.get("horario"))) {
-                        Consulta consultaSelecionada = new Consulta("", dataFormated, "", values.get("sala").toString(), values.get("medicoConsulta").toString(), values.get("pacienteConsulta").toString(), values.get("horario").toString());
-                        ApplicationContext.getInstance().setConsultaSelecionada(consultaSelecionada);
+                        consultaMarcada = new Consulta("", dataFormated, "", values.get("sala").toString(), values.get("medicoConsulta").toString(), values.get("pacienteConsulta").toString(), values.get("horario").toString());
                     }
                 }
             }
         } else {
-            Consulta consutaMarcada = new Consulta("", dataFormated, "", "", medicoComboBox.getValue().getCpf(), "", hora);
-            ApplicationContext.getInstance().setConsultaSelecionada(consutaMarcada);
+            consultaMarcada = new Consulta("", dataFormated, "", "", medicoComboBox.getValue().getCpf(), "", hora);
         }
     }
 

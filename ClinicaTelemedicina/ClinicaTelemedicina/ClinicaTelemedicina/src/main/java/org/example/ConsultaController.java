@@ -138,6 +138,7 @@ public class ConsultaController implements Initializable {
 
     public void goBack() throws IOException {
         App.setRoot("Calendario");
+        ApplicationContext.getInstance().setConsultaSelecionada(null);
     }
 
     public void deleteConsulta() throws IOException, URISyntaxException {
